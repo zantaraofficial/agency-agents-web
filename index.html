@@ -3,523 +3,3184 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🏢 The Agency — AI Specialist Browser</title>
+  <title>Claude AI — The Agency 3D Virtual Headquarters</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Three.js & Animation Engines -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
   <style>
+    /* =====================================================================
+       CLAUDE AI EXACT DESIGN TOKENS
+       ===================================================================== */
     :root[data-theme="dark"] {
-      --bg: #0f1117; --bg2: #161b27; --card: #1c2333; --card-hover: #232e45;
-      --border: #2a3650; --text: #e2e8f0; --muted: #8892a4;
-      --accent: #5b8dee; --accent2: #7c3aed; --green: #22c55e;
-      --shadow: 0 4px 24px rgba(0,0,0,0.4); --overlay: rgba(0,0,0,0.7);
+      --bg: #1e1e1e;
+      --bg-chat: #18181b;
+      --sidebar: #131316;
+      --surface: #26262b;
+      --surface-hover: #313138;
+      --surface-active: #3b3b44;
+      --border: #323238;
+      --border-subtle: #27272a;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
+      --claude-accent: #e06847;       /* Claude signature terracotta */
+      --claude-accent-hover: #ea580c;
+      --claude-pill: #38241e;
+      --claude-pill-text: #fdba74;
+      --bubble-user: #27272a;
+      --code-bg: #121215;
+      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --input-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     }
+
     :root[data-theme="light"] {
-      --bg: #f1f5f9; --bg2: #e2e8f0; --card: #ffffff; --card-hover: #f8faff;
-      --border: #cbd5e1; --text: #1e293b; --muted: #64748b;
-      --accent: #2563eb; --accent2: #7c3aed; --green: #16a34a;
-      --shadow: 0 4px 24px rgba(0,0,0,0.08); --overlay: rgba(0,0,0,0.4);
+      --bg: #fbfaf7;
+      --bg-chat: #f5f4ef;
+      --sidebar: #eeece5;
+      --surface: #ffffff;
+      --surface-hover: #f3f1e9;
+      --surface-active: #e9e6dc;
+      --border: #e3dfd4;
+      --border-subtle: #eae7dd;
+      --text: #1c1917;
+      --text-muted: #78716c;
+      --text-dim: #a8a29e;
+      --claude-accent: #cc5537;
+      --claude-accent-hover: #b4452a;
+      --claude-pill: #ffedd5;
+      --claude-pill-text: #c2410c;
+      --bubble-user: #eeece5;
+      --code-bg: #1c1917;
+      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+      --input-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* NAVBAR */
-    .navbar { position: sticky; top: 0; z-index: 100; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 16px; backdrop-filter: blur(12px); }
-    .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-    .logo span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .badge-total { background: var(--accent); color: white; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
-    .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-    .btn-sm { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
-    .btn-sm:hover { background: var(--card-hover); }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    /* HERO */
-    .hero { padding: 28px 24px 20px; max-width: 1400px; margin: 0 auto; }
-    .hero h1 { font-size: clamp(22px, 4vw, 34px); font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
-    .hero p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
-    .hero-gradient { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    /* =====================================================================
+       CLAUDE SIDEBAR
+       ===================================================================== */
+    .sidebar {
+      width: 270px;
+      min-width: 270px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 50;
+    }
 
-    /* STATS */
-    .stats-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; flex: 1; min-width: 140px; }
-    .stat-num { font-size: 20px; font-weight: 800; }
-    .stat-label { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .sidebar.collapsed {
+      margin-left: -270px;
+    }
 
-    /* COMMAND BUILDER */
-    .cmd-builder { background: linear-gradient(135deg, #1a2540, #1e1a40); border: 1px solid var(--accent); border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; }
-    .cmd-builder h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--accent); }
-    .cmd-builder p { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
-    .cmd-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
-    .cmd-select { background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 10px; font-size: 13px; flex: 1; min-width: 200px; outline: none; cursor: pointer; }
-    .cmd-input { background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 10px; font-size: 13px; flex: 2; min-width: 240px; outline: none; }
-    .cmd-input::placeholder { color: var(--muted); }
-    .cmd-input:focus, .cmd-select:focus { border-color: var(--accent); }
-    .cmd-generate { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-    .cmd-generate:hover { opacity: 0.85; transform: translateY(-1px); }
-    .cmd-output-wrap { margin-top: 14px; display: none; }
-    .cmd-output-wrap.show { display: block; }
-    .cmd-output { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; color: var(--green); line-height: 1.6; word-break: break-all; }
-    .cmd-actions { display: flex; gap: 8px; margin-top: 10px; }
-    .cmd-copy-btn { background: var(--green); color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .cmd-copy-btn:hover { opacity: 0.85; }
-    .cmd-hint { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-top: 8px; }
-    .cmd-hint strong { color: var(--accent); }
+    .sidebar-header {
+      padding: 16px 16px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-    /* CONTROLS */
-    .controls { max-width: 1400px; margin: 0 auto; padding: 0 24px 16px; }
-    .search-wrap { position: relative; margin-bottom: 14px; }
-    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px; opacity: 0.5; }
-    .search-input { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); font-size: 15px; padding: 11px 16px 11px 42px; border-radius: 12px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
-    .search-input::placeholder { color: var(--muted); }
-    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,141,238,0.15); }
-    .clear-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: var(--border); border: none; color: var(--muted); border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; display: none; align-items: center; justify-content: center; }
-    .clear-btn.show { display: flex; }
-    .filter-scroll { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
-    .filter-label { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 0.5px; margin-right: 2px; }
-    .div-btn { padding: 5px 13px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-    .div-btn:hover { border-color: var(--accent); color: var(--text); }
-    .result-info { margin-top: 10px; font-size: 12px; color: var(--muted); }
+    .claude-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
 
-    /* GRID */
-    .grid-wrap { max-width: 1400px; margin: 0 auto; padding: 0 24px 60px; }
-    #grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+    .claude-spark {
+      color: var(--claude-accent);
+      font-size: 20px;
+    }
 
-    /* AGENT CARD */
-    .agent-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s; position: relative; overflow: hidden; }
-    .agent-card:hover { background: var(--card-hover); border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
-    .card-stripe { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0; }
-    .card-top { display: flex; align-items: center; gap: 10px; }
-    .avatar { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: white; flex-shrink: 0; }
-    .card-name { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-div { font-size: 11px; color: var(--muted); margin-top: 1px; }
-    .slug-row { display: flex; align-items: center; gap: 5px; }
-    .slug { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 10px; color: var(--muted); background: var(--bg2); border: 1px solid var(--border); border-radius: 5px; padding: 3px 7px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .copy-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); border-radius: 5px; padding: 3px 7px; font-size: 10px; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
-    .copy-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
-    .copy-btn.copied { background: var(--green); color: white; border-color: var(--green); }
+    .claude-brand {
+      font-family: 'Newsreader', serif;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
 
-    /* USE BUTTON */
-    .use-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; border: none; border-radius: 8px; padding: 7px 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%; text-align: center; }
-    .use-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
 
-    /* MODAL */
-    .modal-overlay { position: fixed; inset: 0; background: var(--overlay); z-index: 999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
-    .modal-overlay.show { display: flex; }
-    .modal { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; width: 100%; max-width: 540px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-    .modal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
-    .modal-avatar { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: white; }
-    .modal-title { font-size: 17px; font-weight: 800; }
-    .modal-div { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .modal-close { margin-left: auto; background: var(--bg2); border: 1px solid var(--border); color: var(--muted); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
-    .modal-close:hover { background: var(--border); }
-    .modal-label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 6px; margin-top: 16px; }
-    .modal-task { width: 100%; background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 12px 14px; border-radius: 10px; font-size: 14px; outline: none; resize: vertical; min-height: 90px; font-family: inherit; }
-    .modal-task::placeholder { color: var(--muted); }
-    .modal-task:focus { border-color: var(--accent); }
-    .modal-command { background: var(--bg); border: 1px dashed var(--border); border-radius: 10px; padding: 12px 14px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: var(--green); line-height: 1.6; word-break: break-all; min-height: 60px; margin-top: 6px; }
-    .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
-    .modal-copy { flex: 1; background: var(--green); color: white; border: none; padding: 11px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .modal-copy:hover { opacity: 0.85; }
-    .modal-copy.copied { background: #15803d; }
-    .modal-cancel { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); padding: 11px 18px; border-radius: 10px; font-size: 14px; cursor: pointer; }
-    .modal-hint { margin-top: 12px; padding: 10px 14px; background: rgba(91,141,238,0.1); border: 1px solid rgba(91,141,238,0.2); border-radius: 8px; font-size: 12px; color: var(--accent); line-height: 1.5; }
+    .icon-btn:hover {
+      background: var(--surface-hover);
+      color: var(--text);
+    }
 
-    /* EMPTY / FOOTER / TOAST */
-    #empty { display: none; text-align: center; padding: 80px 20px; color: var(--muted); }
-    #empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
-    footer { text-align: center; padding: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
-    footer a { color: var(--accent); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--green); color: white; padding: 10px 24px; border-radius: 999px; font-size: 14px; font-weight: 700; transition: transform 0.3s ease; pointer-events: none; z-index: 9999; }
-    #toast.show { transform: translateX(-50%) translateY(0); }
+    .new-chat-btn {
+      margin: 4px 14px 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 9px 14px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-    @media (max-width: 600px) {
-      .hero, .controls, .grid-wrap { padding-left: 16px; padding-right: 16px; }
-      .navbar { padding: 10px 16px; }
-      .cmd-row { flex-direction: column; }
-      .modal { padding: 20px; }
+    .new-chat-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--text-dim);
+      transform: translateY(-1px);
+    }
+
+    /* 3D HQ Switcher Banner in Sidebar */
+    .switch-3d-btn {
+      margin: 0 14px 14px;
+      background: linear-gradient(135deg, rgba(224, 104, 71, 0.15), rgba(139, 92, 246, 0.15));
+      border: 1px solid rgba(224, 104, 71, 0.35);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .switch-3d-btn:hover {
+      background: linear-gradient(135deg, rgba(224, 104, 71, 0.25), rgba(139, 92, 246, 0.25));
+      border-color: var(--claude-accent);
+      transform: translateY(-1px);
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-nav-item:hover {
+      background: var(--surface-hover);
+      color: var(--text);
+    }
+
+    .sidebar-nav-item.active {
+      color: var(--claude-accent);
+      background: var(--surface);
+      border-left-color: var(--claude-accent);
+      font-weight: 600;
+    }
+
+    .sidebar-nav-item .badge {
+      margin-left: auto;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--surface-hover);
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-dim);
+      padding: 12px 18px 4px;
+    }
+
+    .recent-agents-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .recent-agent-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+
+    .recent-agent-item:hover {
+      background: var(--surface-hover);
+      color: var(--text);
+    }
+
+    .recent-agent-item.active {
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .recent-agent-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      padding: 12px 14px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      background: var(--claude-accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* =====================================================================
+       WORKSPACE CONTAINER (TABS: CHAT vs 3D HQ)
+       ===================================================================== */
+    .workspace-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* VIEW 1: CLAUDE 1-ON-1 CHAT VIEW */
+    .view-chat {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--bg-chat);
+      position: relative;
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      height: 54px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-chat);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+    }
+
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .active-agent-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .active-agent-badge:hover {
+      border-color: var(--claude-accent);
+      transform: translateY(-1px);
+    }
+
+    .active-agent-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--claude-accent);
+      border-radius: 50%;
+    }
+
+    .mode-tab-pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .mode-tab-pill.active {
+      background: var(--claude-accent);
+      color: white;
+      border-color: var(--claude-accent);
+    }
+
+    /* Chat Messages Stream */
+    .chat-stream {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px 20px 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      scroll-behavior: smooth;
+    }
+
+    /* Claude Welcome Hero */
+    .claude-hero {
+      max-width: 660px;
+      margin: auto;
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .claude-hero-spark {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      background: linear-gradient(135deg, rgba(224, 104, 71, 0.2), rgba(249, 115, 22, 0.1));
+      border: 1px solid rgba(224, 104, 71, 0.3);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .claude-greeting {
+      font-family: 'Newsreader', serif;
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 400;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .claude-subgreeting {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .claude-hero-commands {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .command-tag {
+      background: var(--claude-pill);
+      color: var(--claude-pill-text);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+
+    .claude-starters-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .claude-starter-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .claude-starter-card:hover {
+      border-color: var(--claude-accent);
+      transform: translateY(-2px);
+      box-shadow: var(--card-shadow);
+    }
+
+    .starter-agent-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--claude-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .starter-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* Message Rows */
+    .msg-row {
+      max-width: 780px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      gap: 16px;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .msg-row.user {
+      justify-content: flex-end;
+    }
+
+    .msg-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .msg-content-wrapper {
+      flex: 1;
+      max-width: 720px;
+    }
+
+    .msg-row.user .msg-content-wrapper {
+      max-width: 600px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .msg-author-tag {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .msg-division-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--surface-hover);
+      color: var(--text-dim);
+    }
+
+    .msg-bubble {
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .msg-row.user .msg-bubble {
+      background: var(--bubble-user);
+      padding: 12px 18px;
+      border-radius: 18px;
+      border-bottom-right-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Claude Artifact Box */
+    .claude-artifact-card {
+      margin: 16px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .claude-artifact-card:hover {
+      border-color: var(--claude-accent);
+    }
+
+    .artifact-card-header {
+      padding: 10px 16px;
+      background: var(--surface-hover);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .artifact-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .artifact-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-artifact {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-artifact:hover {
+      background: var(--surface-active);
+    }
+
+    .btn-artifact-preview {
+      background: var(--claude-accent);
+      color: white;
+      border-color: var(--claude-accent);
+    }
+
+    .artifact-code-body {
+      background: var(--code-bg);
+      padding: 14px;
+      overflow-x: auto;
+      max-height: 340px;
+    }
+
+    .artifact-code-body pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #93c5fd;
+    }
+
+    /* Typing indicator */
+    .typing-dots {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+      padding: 8px 12px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--claude-accent);
+      border-radius: 50%;
+      animation: dotPulse 1.4s infinite ease-in-out both;
+    }
+    .dot:nth-child(1) { animation-delay: -0.32s; }
+    .dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes dotPulse {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Floating Input Capsule */
+    .input-floating-wrapper {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 780px;
+      z-index: 40;
+    }
+
+    .claude-input-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 12px 16px 10px;
+      box-shadow: var(--input-shadow);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .claude-input-card:focus-within {
+      border-color: var(--claude-accent);
+      box-shadow: 0 12px 35px rgba(224, 104, 71, 0.12);
+    }
+
+    .active-agent-tag-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .agent-mention-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--claude-pill);
+      color: var(--claude-pill-text);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .claude-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 14.5px;
+      font-family: inherit;
+      resize: none;
+      min-height: 28px;
+      max-height: 160px;
+      outline: none;
+      line-height: 1.5;
+    }
+
+    .claude-textarea::placeholder {
+      color: var(--text-dim);
+    }
+
+    .input-bottom-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 6px;
+    }
+
+    .input-actions-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-pill-action {
+      background: var(--surface-hover);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-pill-action:hover {
+      background: var(--surface-active);
+      color: var(--text);
+    }
+
+    .send-pill-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--claude-accent);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .send-pill-btn:hover {
+      background: var(--claude-accent-hover);
+      transform: scale(1.05);
+    }
+
+    .send-pill-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Autocomplete Popup */
+    .mention-popup {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 0;
+      right: 0;
+      max-height: 340px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 100;
+      animation: popSlideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mention-popup.show { display: flex; }
+
+    .mention-popup-header {
+      padding: 10px 14px;
+      background: var(--surface-hover);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .mention-popup-list {
+      overflow-y: auto;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mention-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mention-item:hover, .mention-item.focused {
+      background: var(--surface-active);
+    }
+
+    .mention-item-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .mention-item-details { flex: 1; min-width: 0; }
+    .mention-item-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .mention-item-desc { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* =====================================================================
+       VIEW 2: 3D VIRTUAL AGENCY HEADQUARTERS & MULTI-AGENT SWARM
+       ===================================================================== */
+    .view-3d-hq {
+      display: none;
+      flex: 1;
+      height: 100%;
+      background: #090d16;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .view-3d-hq.active-view {
+      display: flex;
+    }
+
+    /* 3D Canvas Area (Left 60%) */
+    .hq-canvas-container {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #111827 0%, #030712 100%);
+    }
+
+    #three-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: none;
+    }
+
+    /* 3D Top Overlay Bar */
+    .hq-top-overlay {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .hq-brand-badge {
+      pointer-events: auto;
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      padding: 8px 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .hq-live-dot {
+      width: 10px;
+      height: 10px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #10b981;
+      animation: pulseGreen 2s infinite;
+    }
+
+    .hq-dept-controls {
+      pointer-events: auto;
+      display: flex;
+      gap: 6px;
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      padding: 6px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .hq-dept-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .hq-dept-btn:hover, .hq-dept-btn.active {
+      background: rgba(224, 104, 71, 0.2);
+      border-color: var(--claude-accent);
+      color: #ffffff;
+    }
+
+    /* 3D Legend & Controls Hint */
+    .hq-hint-overlay {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: rgba(17, 24, 39, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 11px;
+      color: #94a3b8;
+      pointer-events: none;
+      display: flex;
+      gap: 14px;
+      z-index: 10;
+    }
+
+    /* Autonomous Multi-Agent Command Panel (Right 40%) */
+    .hq-command-deck {
+      width: 440px;
+      min-width: 440px;
+      height: 100%;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.4);
+    }
+
+    .command-deck-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--surface-hover);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .deck-title {
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .deck-subtitle {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* Autonomous Command Prompt Input */
+    .autonomous-prompt-box {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-chat);
+    }
+
+    .auto-textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      padding: 12px 14px;
+      font-size: 13.5px;
+      font-family: inherit;
+      resize: none;
+      min-height: 72px;
+      outline: none;
+      line-height: 1.5;
+      transition: all 0.2s;
+    }
+
+    .auto-textarea:focus {
+      border-color: var(--claude-accent);
+      box-shadow: 0 0 0 3px rgba(224, 104, 71, 0.15);
+    }
+
+    .btn-launch-swarm {
+      margin-top: 10px;
+      width: 100%;
+      background: linear-gradient(135deg, #e06847, #ea580c);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(224, 104, 71, 0.35);
+      transition: all 0.2s;
+    }
+
+    .btn-launch-swarm:hover {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      transform: translateY(-1px);
+    }
+
+    .btn-launch-swarm:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Swarm Execution Feed */
+    .swarm-timeline {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .swarm-step-card {
+      background: var(--bg-chat);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: slideUp 0.3s;
+    }
+
+    .swarm-step-card.active-step {
+      border-color: var(--claude-accent);
+      box-shadow: 0 0 20px rgba(224, 104, 71, 0.15);
+      background: var(--surface);
+    }
+
+    .step-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .step-agent-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-agent-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .step-agent-name {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .step-dept-tag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--surface-hover);
+      color: var(--text-dim);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .step-task-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .step-output-box {
+      background: var(--code-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 12px;
+      max-height: 160px;
+      overflow-y: auto;
+      color: #93c5fd;
+      line-height: 1.5;
+    }
+
+    /* Handover Notification Card */
+    .handover-card {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15));
+      border: 1px dashed rgba(59, 130, 246, 0.4);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #60a5fa;
+      animation: pulseHandover 1.5s infinite alternate;
+    }
+
+    /* =====================================================================
+       AGENT DIRECTORY MODAL
+       ===================================================================== */
+    .directory-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .directory-modal-overlay.show { display: flex; }
+
+    .directory-card {
+      width: 90vw;
+      max-width: 880px;
+      height: 82vh;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .directory-header {
+      padding: 18px 24px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .directory-title h3 {
+      font-family: 'Newsreader', serif;
+      font-size: 24px;
+      font-weight: 500;
+    }
+
+    .directory-search-bar {
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--surface-hover);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .directory-search-input {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      outline: none;
+    }
+
+    .directory-divisions-scroll {
+      display: flex;
+      gap: 6px;
+      padding: 10px 24px;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border-subtle);
+      scrollbar-width: none;
+    }
+    .directory-divisions-scroll::-webkit-scrollbar { display: none; }
+
+    .div-tab {
+      background: var(--surface-hover);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+
+    .div-tab.active {
+      background: var(--claude-accent);
+      color: white;
+      border-color: var(--claude-accent);
+    }
+
+    .directory-grid {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+    }
+
+    .directory-agent-card {
+      background: var(--bg-chat);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .directory-agent-card:hover {
+      border-color: var(--claude-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .card-top-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dir-card-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .dir-card-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .dir-card-division {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: capitalize;
+    }
+
+    .dir-card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* =====================================================================
+       LIVE ARTIFACTS DRAWER (CLAUDE CANVAS PREVIEW)
+       ===================================================================== */
+    .artifact-drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 60vw;
+      max-width: 900px;
+      height: 100vh;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      box-shadow: -15px 0 40px rgba(0,0,0,0.4);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .artifact-drawer.open { right: 0; }
+
+    .artifact-drawer-header {
+      padding: 12px 20px;
+      background: var(--surface-hover);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .artifact-drawer-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #090d16;
+      overflow: hidden;
+    }
+
+    .artifact-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+    }
+
+    /* SETTINGS MODAL */
+    .settings-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .settings-modal-overlay.show { display: flex; }
+
+    .settings-modal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      max-width: 480px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    /* KEYFRAMES */
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    @keyframes pulseHandover {
+      0% { opacity: 0.8; transform: translateY(0); }
+      100% { opacity: 1; transform: translateY(-2px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popSlideUp {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes modalScale {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hq-command-deck { width: 100%; min-width: 100%; height: 50%; }
+      .view-3d-hq { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <span class="logo">🏢 <span>The Agency</span></span>
-  <span class="badge-total" id="nav-count">283 Agents</span>
-  <div class="nav-right">
-    <button class="btn-sm" onclick="toggleTheme()">🌙 Dark</button>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <h1><span class="hero-gradient">283 AI Specialists</span><br/>Siap Membantu Workflow Kamu</h1>
-  <p>Pilih agent → Ketik tugasmu → Copy command → Paste di Antigravity chat. Semudah itu! 🚀</p>
-  <div class="stats-row" id="stats-row"></div>
-
-  <!-- COMMAND BUILDER -->
-  <div class="cmd-builder">
-    <h3>⚡ Command Builder</h3>
-    <p>Pilih agent dan tulis tugasmu — command siap di-copy ke Antigravity</p>
-    <div class="cmd-row">
-      <select class="cmd-select" id="cmd-agent-select">
-        <option value="">— Pilih Agent —</option>
-      </select>
-      <input type="text" class="cmd-input" id="cmd-task-input" placeholder="Contoh: review kode React saya, buat SEO untuk landing page..." />
-      <button class="cmd-generate" onclick="generateCommand()">⚡ Generate</button>
-    </div>
-    <div class="cmd-output-wrap" id="cmd-output-wrap">
-      <div class="cmd-output" id="cmd-output"></div>
-      <div class="cmd-actions">
-        <button class="cmd-copy-btn" id="cmd-copy-btn" onclick="copyCommand()">📋 Copy Command</button>
+  <!-- =====================================================================
+       CLAUDE SIDEBAR
+       ===================================================================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="claude-logo-wrap" onclick="switchView('chat')">
+        <span class="claude-spark">✳</span>
+        <span class="claude-brand">Claude</span>
       </div>
-      <div class="cmd-hint">💡 Paste command ini langsung ke chat <strong>Antigravity</strong> dan tekan Enter</div>
+      <button class="icon-btn" onclick="toggleSidebar()" title="Collapse sidebar">◀</button>
     </div>
-  </div>
-</section>
 
-<!-- CONTROLS -->
-<section class="controls">
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="search" class="search-input" placeholder="Cari agent, divisi, atau keahlian..." />
-    <button class="clear-btn" id="clear-btn" onclick="clearSearch()">✕</button>
-  </div>
-  <div class="filter-scroll">
-    <span class="filter-label">DIVISI:</span>
-    <div id="filters"></div>
-  </div>
-  <div class="result-info" id="result-info">Menampilkan 283 / 283 agents</div>
-</section>
+    <!-- Start New Chat -->
+    <button class="new-chat-btn" onclick="switchView('chat'); startNewChat();">
+      <span style="font-size: 16px;">+</span>
+      <span>Percakapan Baru</span>
+    </button>
 
-<!-- GRID -->
-<section class="grid-wrap">
-  <div id="grid"></div>
-  <div id="empty"><div class="empty-icon">🔎</div><p>Tidak ada agent ditemukan</p></div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <p>Built from <a href="https://github.com/msitarzewski/agency-agents" target="_blank">agency-agents</a> · Installed as Antigravity Skills · <a href="https://github.com/zantaraofficial/agency-agents-web" target="_blank">Source</a></p>
-</footer>
-
-<!-- MODAL -->
-<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-avatar" id="modal-avatar"></div>
-      <div>
-        <div class="modal-title" id="modal-title"></div>
-        <div class="modal-div" id="modal-div"></div>
+    <!-- 3D VIRTUAL HQ SWITCHER -->
+    <button class="switch-3d-btn" onclick="switchView('3d-hq')">
+      <span style="font-size: 18px;">🏢</span>
+      <div style="text-align: left;">
+        <div>Gedung Virtual 3D</div>
+        <div style="font-size: 10.5px; opacity: 0.8; font-weight: 500;">Multi-Agent Swarm HQ</div>
       </div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+    </button>
+
+    <!-- Navigation Hubs -->
+    <div class="sidebar-nav-item active" onclick="openDirectoryModal()">
+      <span>🏢 Direktori Agen</span>
+      <span class="badge" id="total-agents-badge">271</span>
+    </div>
+    <div class="sidebar-nav-item" onclick="openSettingsModal()">
+      <span>⚙️ Pengaturan AI</span>
     </div>
 
-    <div class="modal-label">TUGASMU UNTUK AGENT INI:</div>
-    <textarea class="modal-task" id="modal-task" placeholder="Contoh: Review kode login saya dan cari bug keamanan..." oninput="updateModalCommand()"></textarea>
+    <div class="sidebar-section-title">TIM REKOMENDASI</div>
 
-    <div class="modal-label">COMMAND YANG DIHASILKAN:</div>
-    <div class="modal-command" id="modal-command">Use the <span style="color:var(--accent)">agency-...</span> skill to <em style="color:var(--muted)">ketik tugasmu di atas...</em></div>
+    <!-- Scrollable Recent Agents list -->
+    <div class="recent-agents-list" id="recent-agents-list"></div>
 
-    <div class="modal-actions">
-      <button class="modal-copy" id="modal-copy-btn" onclick="copyModalCommand()">📋 Copy & Siap Paste ke Antigravity</button>
-      <button class="modal-cancel" onclick="closeModal()">Tutup</button>
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="user-pill" onclick="openSettingsModal()">
+        <div class="user-avatar">U</div>
+        <span>User Workspace</span>
+      </div>
+      <button class="icon-btn" onclick="toggleTheme()" id="theme-btn" title="Ganti Tema">🌙</button>
     </div>
-    <div class="modal-hint">
-      💬 Setelah copy, buka Antigravity → paste di chat → tekan <strong>Enter</strong>. Agent langsung aktif!
-    </div>
-  </div>
-</div>
+  </aside>
 
-<!-- TOAST -->
-<div id="toast">✅ Command disalin! Paste di Antigravity sekarang</div>
+  <!-- =====================================================================
+       WORKSPACE CONTAINER
+       ===================================================================== -->
+  <div class="workspace-wrapper">
 
-<script>
-// =====================================================================
-// DATA
-// =====================================================================
-const DIVISIONS = {
-  engineering:          { label: "⚙️ Engineering",    color: "#3b82f6" },
-  design:               { label: "🎨 Design",          color: "#a855f7" },
-  marketing:            { label: "📢 Marketing",        color: "#f59e0b" },
-  sales:                { label: "💼 Sales",            color: "#10b981" },
-  finance:              { label: "💰 Finance",          color: "#06b6d4" },
-  security:             { label: "🛡️ Security",         color: "#ef4444" },
-  product:              { label: "📦 Product",          color: "#f97316" },
-  research:             { label: "🔬 Research",         color: "#ec4899" },
-  "game-development":   { label: "🎮 Game Dev",         color: "#7c3aed" },
-  gis:                  { label: "🗺️ GIS",              color: "#059669" },
-  healthcare:           { label: "🏥 Healthcare",       color: "#0ea5e9" },
-  testing:              { label: "🧪 Testing",          color: "#84cc16" },
-  support:              { label: "🎧 Support",          color: "#64748b" },
-  "project-management": { label: "📋 Project Mgmt",     color: "#b45309" },
-  "paid-media":         { label: "📣 Paid Media",       color: "#db2777" },
-  "spatial-computing":  { label: "🥽 XR / Spatial",     color: "#6366f1" },
-  academic:             { label: "🎓 Academic",         color: "#0369a1" },
-  strategy:             { label: "♟️ Strategy",          color: "#b91c1c" },
-  specialized:          { label: "⭐ Specialized",      color: "#d97706" },
-};
+    <!-- VIEW 1: CLAUDE 1-ON-1 CHAT VIEW -->
+    <div class="view-chat" id="view-chat">
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="icon-btn" onclick="toggleSidebar()" title="Toggle Sidebar">☰</button>
+          <div class="active-agent-badge" onclick="openDirectoryModal()" id="active-agent-badge">
+            <span class="active-agent-dot"></span>
+            <span id="top-agent-name">Frontend Developer</span>
+            <span style="font-size: 10px; color: var(--text-dim);">▾</span>
+          </div>
+        </div>
 
-const DIV_KEYWORDS = {
-  engineering:          ['frontend','backend','software','architect','developer','engineer','devops','platform','database','cms','webassembly','embedded','firmware','realtime','payments','pdf','lsp','rust','terminal','dx','codebase','git','code-reviewer','minimal-change','rapid-prototyper','mobile-app','mobile-release','iot','wordpress','drupal','uswds','fedramp','orgscript','autonomous','voice-ai','llm','rag','ai-engineer','mcp','multi-agent','agents-orchestrator','agentic-identity','automation-governance','workflow-architect','knowledge-graph','identity-access','secrets','privacy-engineer','data-engineer','data-visualization','finops','feishu','wechat-mini','gaussdb','china-network','blender','analytics'],
-  design:               ['ui-designer','ux','visual-storyteller','image-prompt','technical-artist','inclusive-visuals','ui-finish','persona-walkthrough','accessibility-auditor','section-508'],
-  marketing:            ['seo','baidu','growth-hacker','social-media','content-creator','email-marketing','brand','pr-communications','instagram','linkedin','twitter-engager','tiktok','douyin','kuaishou','xiaohongshu','weibo','bilibili','wechat-official','app-store','podcast','video-optimization','multi-platform','carousel','short-video','livestream','agentic-search','ai-citation','trend-researcher','search-query','behavioral','whimsy'],
-  sales:                ['sales-coach','sales-engineer','sales-outreach','outbound','deal-strategist','account-strategist','pipeline','proposal','solution-engineer','offer-lead','customer-success','discovery-coach','sales-data','identity-graph','private-domain'],
-  finance:              ['financial','chief-financial','fp-a','bookkeeper','accounts-payable','finance-tracker','investment','pricing','tax','loan','finops'],
-  security:             ['security-architect','penetration','application-security','cloud-security','incident','threat','secops','blockchain-security','ai-generated-code-security','data-privacy','compliance','fedramp','zk-steward'],
-  product:              ['product-manager','sprint','experiment-tracker','tool-evaluator','reality-checker','feedback-synthesizer','strategy-duel','business-strategist'],
-  research:             ['research-synthesist','statistician','historian','anthropologist','narratologist','cultural-intelligence','geographer','grant-writer','book-co-author','study-abroad','psychologist','personal-growth','organizational-psychologist','evidence-collector','language-translator','search-relevance','ai-data-remediation','data-consolidation','model-qa','x-twitter-intelligence','focus-music'],
-  "game-development":   ['game','unity','unreal','godot','roblox','level-designer','narrative-designer','economy-designer'],
-  gis:                  ['gis','geo','spatial-data','web-gis','drone','bim','cartography','civil-engineer'],
-  healthcare:           ['healthcare','medical','clinical','sovereign-health','aging-parent'],
-  testing:              ['test-automation','test-results','api-tester','performance-benchmark'],
-  support:              ['customer-service','support-responder','hospitality','retail-customer','it-service','meeting-notes','document-generator','executive-summary','report-distribution','universal-document','technical-writer'],
-  "project-management": ['senior-project','project-shepherd','chief-of-staff','operations-manager','jira','workflow-optimizer','change-management','master-plan','studio-operations','studio-producer','m-a-integration','supply-chain','esg'],
-  "paid-media":         ['paid-media','paid-social','ppc','programmatic','ad-creative','tracking-measurement'],
-  "spatial-computing":  ['xr','visionos','macos-spatial','3d-scene'],
-  academic:             ['grant-writer','historian','anthropologist','narratologist','statistician','book-co-author','study-abroad'],
-  strategy:             ['business-strategist','strategy-duel','french-consulting','korean-business','china-market','cross-border','china-e-commerce','government-digital','real-estate'],
-  specialized:          ['prompt-engineer','developer-advocate','developer-community','reddit-community','legal','hr-onboarding','recruitment','corporate-training','electrical-engineer','network-engineer','filament','solidity','salesforce','servicenow','ats-validator','resume-tailor','zhihu','aeo-foundations'],
-};
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="mode-tab-pill active" onclick="switchView('chat')">💬 Chat 1-on-1</button>
+          <button class="mode-tab-pill" onclick="switchView('3d-hq')">🏢 Gedung 3D & Swarm</button>
+          <button class="icon-btn" onclick="openDirectoryModal()" title="Buka Menu Agen">🔍</button>
+          <button class="icon-btn" onclick="clearCurrentChat()" title="Hapus Chat Ini">🗑️</button>
+          <button class="icon-btn" onclick="openSettingsModal()" title="Pengaturan">⚙️</button>
+        </div>
+      </header>
 
-function detectDivision(slug) {
-  const name = slug.replace('agency-', '');
-  for (const [div, keywords] of Object.entries(DIV_KEYWORDS)) {
-    if (keywords.some(k => name.includes(k))) return div;
-  }
-  return 'engineering';
-}
+      <!-- Chat Stream Area -->
+      <div class="chat-stream" id="chat-stream"></div>
 
-const RAW_SLUGS = ["agency-3d-scene-developer","agency-accessibility-auditor","agency-account-strategist","agency-accounts-payable-agent","agency-ad-creative-strategist","agency-aeo-foundations-architect","agency-agentic-identity-trust-architect","agency-agentic-search-optimizer","agency-agents-orchestrator","agency-aging-parent-care-companion","agency-ai-citation-strategist","agency-ai-data-remediation-engineer","agency-ai-engineer","agency-ai-generated-code-security-auditor","agency-analytics-reporter","agency-anthropologist","agency-api-platform-engineer","agency-api-tester","agency-app-store-optimizer","agency-application-security-engineer","agency-ats-validator-architect","agency-automation-governance-architect","agency-autonomous-optimization-architect","agency-backend-architect","agency-baidu-seo-specialist","agency-behavioral-nudge-engine","agency-bilibili-content-strategist","agency-bim-gis-specialist","agency-blender-add-on-engineer","agency-blockchain-security-auditor","agency-book-co-author","agency-bookkeeper-controller","agency-brand-guardian","agency-business-strategist","agency-carousel-growth-engine","agency-cartography-designer","agency-change-management-consultant","agency-chief-financial-officer","agency-chief-of-staff","agency-china-e-commerce-operator","agency-china-market-localization-strategist","agency-china-network-engineer","agency-civil-engineer","agency-clinical-evidence-agent","agency-cloud-security-architect","agency-cms-developer","agency-code-reviewer","agency-codebase-archaeologist","agency-codebase-onboarding-engineer","agency-compliance-auditor","agency-content-creator","agency-corporate-training-designer","agency-cross-border-e-commerce-specialist","agency-cultural-intelligence-strategist","agency-customer-service","agency-customer-success-manager","agency-data-consolidation-agent","agency-data-engineer","agency-data-privacy-officer","agency-data-visualization-engineer","agency-database-optimizer","agency-database-reliability-engineer","agency-deal-strategist","agency-desktop-app-engineer","agency-developer-advocate","agency-developer-community-builder","agency-developer-tooling-engineer","agency-devops-automator","agency-discovery-coach","agency-document-generator","agency-douyin-strategist","agency-drone-reality-mapping-specialist","agency-drupal-performance-engineer","agency-drupal-shopping-cart-engineer","agency-dx-engineer","agency-economy-designer","agency-electrical-engineer","agency-email-intelligence-engineer","agency-email-marketing-strategist","agency-embedded-firmware-engineer","agency-esg-sustainability-officer","agency-evidence-collector","agency-executive-summary-generator","agency-experiment-tracker","agency-fedramp-rmf-compliance-engineer","agency-feedback-synthesizer","agency-feishu-integration-developer","agency-filament-optimization-specialist","agency-finance-tracker","agency-financial-analyst","agency-finops-engineer","agency-focus-music-architect","agency-fp-a-analyst","agency-french-consulting-market-navigator","agency-frontend-developer","agency-game-audio-engineer","agency-game-designer","agency-gaussdb-expert-engineer","agency-geoai-ml-engineer","agency-geographer","agency-geoprocessing-specialist","agency-gis-analyst","agency-gis-qa-engineer","agency-git-workflow-master","agency-global-podcast-strategist","agency-godot-gameplay-scripter","agency-godot-multiplayer-engineer","agency-godot-shader-developer","agency-government-digital-presales-consultant","agency-grant-writer","agency-growth-hacker","agency-healthcare-customer-service","agency-healthcare-innovation-strategist","agency-healthcare-marketing-compliance-specialist","agency-historian","agency-hospitality-guest-services","agency-hr-onboarding","agency-identity-access-engineer","agency-identity-graph-operator","agency-image-prompt-engineer","agency-incident-responder","agency-incident-response-commander","agency-inclusive-visuals-specialist","agency-infrastructure-maintainer","agency-instagram-curator","agency-internationalization-engineer","agency-investment-researcher","agency-iot-fleet-engineer","agency-it-service-manager","agency-jira-workflow-steward","agency-knowledge-graph-engineer","agency-korean-business-navigator","agency-kuaishou-strategist","agency-language-translator","agency-legal-billing-time-tracking","agency-legal-client-intake","agency-legal-compliance-checker","agency-legal-document-review","agency-level-designer","agency-linkedin-content-creator","agency-livestream-commerce-coach","agency-llm-post-training-engineer","agency-loan-officer-assistant","agency-lsp-index-engineer","agency-m-a-integration-manager","agency-macos-spatial-metal-engineer","agency-master-plan-architect","agency-mcp-builder","agency-medical-billing-coding-specialist","agency-meeting-notes-specialist","agency-minimal-change-engineer","agency-mobile-app-builder","agency-mobile-release-engineer","agency-model-qa-specialist","agency-multi-agent-systems-architect","agency-multi-platform-publisher","agency-narrative-designer","agency-narratologist","agency-network-engineer","agency-offer-lead-gen-strategist","agency-operations-manager","agency-organizational-psychologist","agency-orgscript-engineer","agency-outbound-strategist","agency-paid-media-auditor","agency-paid-social-strategist","agency-payments-billing-engineer","agency-pdf-engine-architect","agency-penetration-tester","agency-performance-benchmarker","agency-persona-walkthrough-specialist","agency-personal-growth-mentor","agency-pipeline-analyst","agency-platform-engineer","agency-podcast-strategist","agency-ppc-campaign-strategist","agency-pr-communications-manager","agency-pricing-analyst","agency-privacy-engineer","agency-private-domain-operator","agency-product-manager","agency-programmatic-display-buyer","agency-project-shepherd","agency-prompt-engineer","agency-proposal-strategist","agency-psychologist","agency-rag-pipeline-engineer","agency-rapid-prototyper","agency-real-estate-buyer-seller","agency-reality-checker","agency-realtime-collaboration-engineer","agency-recruitment-specialist","agency-reddit-community-builder","agency-report-distribution-agent","agency-research-synthesist","agency-resume-tailor","agency-retail-customer-returns","agency-roblox-avatar-creator","agency-roblox-experience-designer","agency-roblox-systems-scripter","agency-rust-refactoring-specialist","agency-sales-coach","agency-sales-data-extraction-agent","agency-sales-engineer","agency-sales-outreach","agency-salesforce-architect","agency-search-query-analyst","agency-search-relevance-engineer","agency-secrets-credential-hygiene-engineer","agency-section-508-accessibility-specialist","agency-security-architect","agency-senior-developer","agency-senior-project-manager","agency-senior-secops-engineer","agency-seo-specialist","agency-servicenow-developer-mentor","agency-short-video-editing-coach","agency-social-media-strategist","agency-software-architect","agency-solidity-smart-contract-engineer","agency-solution-engineer","agency-sovereign-health-systems-agent","agency-spatial-data-engineer","agency-spatial-data-scientist","agency-sprint-prioritizer","agency-sre-site-reliability-engineer","agency-statistician","agency-strategy-duel-agent","agency-studio-operations","agency-studio-producer","agency-study-abroad-advisor","agency-supply-chain-strategist","agency-support-responder","agency-tax-strategist","agency-technical-artist","agency-technical-consultant","agency-technical-writer","agency-terminal-integration-specialist","agency-test-automation-engineer","agency-test-results-analyzer","agency-threat-detection-engineer","agency-threat-intelligence-analyst","agency-tiktok-strategist","agency-tool-evaluator","agency-tracking-measurement-specialist","agency-trend-researcher","agency-twitter-engager","agency-ui-designer","agency-ui-finish-gate-reviewer","agency-unity-architect","agency-unity-editor-tool-developer","agency-unity-multiplayer-engineer","agency-unity-shader-graph-artist","agency-universal-document-compiler","agency-unreal-multiplayer-architect","agency-unreal-systems-engineer","agency-unreal-technical-artist","agency-unreal-world-builder","agency-uswds-developer","agency-ux-architect","agency-ux-researcher","agency-video-optimization-specialist","agency-video-streaming-engineer","agency-visionos-spatial-engineer","agency-visual-storyteller","agency-voice-ai-integration-engineer","agency-web-gis-developer","agency-webassembly-engineer","agency-wechat-mini-program-developer","agency-wechat-official-account-manager","agency-weibo-strategist","agency-whimsy-injector","agency-wordpress-performance-engineer","agency-wordpress-shopping-cart-engineer","agency-workflow-architect","agency-workflow-optimizer","agency-x-twitter-intelligence-analyst","agency-xiaohongshu-specialist","agency-xr-cockpit-interaction-specialist","agency-xr-immersive-developer","agency-xr-interface-architect","agency-zhihu-strategist","agency-zk-steward"];
+      <!-- Floating Input Capsule with @ and / Autocomplete -->
+      <div class="input-floating-wrapper">
+        <div class="mention-popup" id="mention-popup">
+          <div class="mention-popup-header">
+            <span>Pilih Spesialis (@ atau /)</span>
+            <span id="mention-filter-count">271 agen</span>
+          </div>
+          <div class="mention-popup-list" id="mention-popup-list"></div>
+        </div>
 
-function toTitle(slug) {
-  return slug.replace('agency-','').split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
-}
+        <div class="claude-input-card">
+          <div class="active-agent-tag-bar" id="active-tag-bar">
+            <div class="agent-mention-tag" id="current-agent-tag">
+              <span id="tag-agent-name">@ Frontend Developer</span>
+              <span class="tag-remove" onclick="openDirectoryModal()" title="Ganti Agen">⇄</span>
+            </div>
+          </div>
 
-const AGENTS = RAW_SLUGS.map(slug => {
-  const divKey = detectDivision(slug);
-  return { slug, name: toTitle(slug), divKey, div: DIVISIONS[divKey] };
-}).sort((a,b) => a.name.localeCompare(b.name));
+          <textarea
+            id="claude-input"
+            class="claude-textarea"
+            rows="1"
+            placeholder="Ketik pesan Anda... atau ketik @ atau / untuk panggil spesialis"
+          ></textarea>
 
-// =====================================================================
-// STATE
-// =====================================================================
-let activeDiv = 'all';
-let searchTerm = '';
-let isDark = true;
-let currentModalSlug = '';
+          <div class="input-bottom-bar">
+            <div class="input-actions-left">
+              <button class="btn-pill-action" onclick="openDirectoryModal()">
+                <span>🏢 Menu Agen</span>
+              </button>
+              <button class="btn-pill-action" onclick="switchView('3d-hq')">
+                <span>🚀 Tugaskan Tim Otonom</span>
+              </button>
+            </div>
 
-// =====================================================================
-// THEME
-// =====================================================================
-function toggleTheme() {
-  isDark = !isDark;
-  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  document.querySelector('.btn-sm').textContent = isDark ? '🌙 Dark' : '☀️ Light';
-}
-
-// =====================================================================
-// STATS
-// =====================================================================
-function buildStats() {
-  const counts = {};
-  AGENTS.forEach(a => { counts[a.divKey] = (counts[a.divKey] || 0) + 1; });
-  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,3);
-  const html = [
-    `<div class="stat-card"><span style="font-size:22px">🏢</span><div><div class="stat-num">${AGENTS.length}</div><div class="stat-label">Total Agents</div></div></div>`,
-    `<div class="stat-card"><span style="font-size:22px">🗂️</span><div><div class="stat-num">${Object.keys(DIVISIONS).length}</div><div class="stat-label">Divisi</div></div></div>`,
-    ...top.map(([k,n]) => `<div class="stat-card"><span style="font-size:22px">${DIVISIONS[k].label.split(' ')[0]}</span><div><div class="stat-num">${n}</div><div class="stat-label">${DIVISIONS[k].label.replace(/^.\s/,'')}</div></div></div>`)
-  ].join('');
-  document.getElementById('stats-row').innerHTML = html;
-}
-
-// =====================================================================
-// COMMAND BUILDER (top)
-// =====================================================================
-function populateSelect() {
-  const sel = document.getElementById('cmd-agent-select');
-  AGENTS.forEach(a => {
-    const opt = document.createElement('option');
-    opt.value = a.slug;
-    opt.textContent = `${a.div.label.split(' ')[0]} ${a.name}`;
-    sel.appendChild(opt);
-  });
-}
-
-function generateCommand() {
-  const slug = document.getElementById('cmd-agent-select').value;
-  const task = document.getElementById('cmd-task-input').value.trim();
-  const wrap = document.getElementById('cmd-output-wrap');
-  const out  = document.getElementById('cmd-output');
-  if (!slug) { alert('Pilih agent dulu!'); return; }
-  const cmd = task ? `Use the ${slug} skill to ${task}` : `Use the ${slug} skill`;
-  out.textContent = cmd;
-  wrap.classList.add('show');
-}
-
-function copyCommand() {
-  const text = document.getElementById('cmd-output').textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('cmd-copy-btn');
-    btn.textContent = '✅ Tersalin!';
-    showToast();
-    setTimeout(() => btn.textContent = '📋 Copy Command', 2000);
-  });
-}
-
-// =====================================================================
-// FILTERS
-// =====================================================================
-function buildFilters() {
-  const counts = {};
-  AGENTS.forEach(a => { counts[a.divKey] = (counts[a.divKey] || 0) + 1; });
-  const allBtn = `<button class="div-btn active" data-div="all" onclick="setFilter('all')">🏢 Semua (${AGENTS.length})</button>`;
-  const divBtns = Object.entries(DIVISIONS).map(([key,div]) => counts[key]
-    ? `<button class="div-btn" data-div="${key}" onclick="setFilter('${key}')">${div.label} (${counts[key]})</button>`
-    : ''
-  ).join('');
-  document.getElementById('filters').innerHTML = allBtn + divBtns;
-}
-
-function setFilter(divKey) {
-  activeDiv = divKey;
-  document.querySelectorAll('.div-btn').forEach(btn => {
-    const isActive = btn.dataset.div === divKey;
-    btn.classList.toggle('active', isActive);
-    const d = DIVISIONS[divKey];
-    btn.style.background = isActive ? (d ? d.color : 'var(--accent)') : '';
-    btn.style.borderColor = isActive ? 'transparent' : '';
-    btn.style.color = isActive ? 'white' : '';
-  });
-  renderGrid();
-}
-
-// =====================================================================
-// GRID
-// =====================================================================
-function renderGrid() {
-  const term = searchTerm.toLowerCase();
-  const filtered = AGENTS.filter(a => {
-    const matchDiv = activeDiv === 'all' || a.divKey === activeDiv;
-    const matchSearch = !term || a.name.toLowerCase().includes(term) || a.slug.includes(term) || a.div.label.toLowerCase().includes(term) || a.divKey.includes(term);
-    return matchDiv && matchSearch;
-  });
-  document.getElementById('result-info').textContent = `Menampilkan ${filtered.length} / ${AGENTS.length} agents`;
-  document.getElementById('nav-count').textContent = `${filtered.length} Agents`;
-  const empty = document.getElementById('empty');
-  const grid  = document.getElementById('grid');
-  if (!filtered.length) { grid.innerHTML=''; empty.style.display='block'; return; }
-  empty.style.display = 'none';
-  grid.innerHTML = filtered.map(a => {
-    const initials = a.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
-    return `
-    <div class="agent-card">
-      <div class="card-stripe" style="background:${a.div.color}"></div>
-      <div class="card-top">
-        <div class="avatar" style="background:${a.div.color}">${initials}</div>
-        <div>
-          <div class="card-name" title="${a.name}">${a.name}</div>
-          <div class="card-div">${a.div.label}</div>
+            <button id="send-btn" class="send-pill-btn" onclick="sendMessage()" title="Kirim Pesan">
+              ➤
+            </button>
+          </div>
         </div>
       </div>
-      <div class="slug-row">
-        <div class="slug" title="${a.slug}">${a.slug}</div>
-        <button class="copy-btn" onclick="copySlug(this,'${a.slug}')">Copy</button>
+    </div>
+
+    <!-- =====================================================================
+         VIEW 2: 3D VIRTUAL AGENCY HEADQUARTERS & MULTI-AGENT SWARM
+         ===================================================================== -->
+    <div class="view-3d-hq" id="view-3d-hq">
+      <!-- 3D WebGL Canvas Area -->
+      <div class="hq-canvas-container" id="hq-canvas-container">
+        <canvas id="three-canvas"></canvas>
+
+        <!-- Top HUD Overlay -->
+        <div class="hq-top-overlay">
+          <div class="hq-brand-badge">
+            <div class="hq-live-dot"></div>
+            <div>
+              <div style="font-size: 13px; font-weight: 800; color: white;">THE AGENCY — 3D VIRTUAL HEADQUARTERS</div>
+              <div style="font-size: 10.5px; color: #94a3b8;">271 Autonomous AI Specialists Working in Real-Time</div>
+            </div>
+          </div>
+
+          <!-- Department Camera Focus Buttons -->
+          <div class="hq-dept-controls">
+            <button class="hq-dept-btn active" onclick="focusDepartment('overview', this)">🏢 Gedung Penuh</button>
+            <button class="hq-dept-btn" onclick="focusDepartment('boardroom', this)">🏛️ Boardroom</button>
+            <button class="hq-dept-btn" onclick="focusDepartment('engineering', this)">💻 Lab Koding</button>
+            <button class="hq-dept-btn" onclick="focusDepartment('design', this)">🎨 Studio Desain</button>
+            <button class="hq-dept-btn" onclick="focusDepartment('security', this)">🛡️ Vault Keamanan</button>
+            <button class="hq-dept-btn" onclick="switchView('chat')">✕ Tutup 3D</button>
+          </div>
+        </div>
+
+        <!-- 3D Navigation Hint -->
+        <div class="hq-hint-overlay">
+          <span>🖱️ <strong>Klik Kiri + Tarik:</strong> Putar Gedung 360°</span>
+          <span>📜 <strong>Scroll:</strong> Zoom Masuk/Keluar</span>
+          <span>🖱️ <strong>Klik Meja/Orang:</strong> Sorot Spesialis</span>
+        </div>
       </div>
-      <button class="use-btn" onclick="openModal('${a.slug}')">▶ Gunakan Agent Ini</button>
-    </div>`;
-  }).join('');
-}
 
-// =====================================================================
-// MODAL
-// =====================================================================
-function openModal(slug) {
-  const a = AGENTS.find(x => x.slug === slug);
-  if (!a) return;
-  currentModalSlug = slug;
-  const initials = a.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
-  document.getElementById('modal-avatar').style.background = a.div.color;
-  document.getElementById('modal-avatar').textContent = initials;
-  document.getElementById('modal-title').textContent = a.name;
-  document.getElementById('modal-div').textContent = a.div.label;
-  document.getElementById('modal-task').value = '';
-  document.getElementById('modal-command').innerHTML = `Use the <span style="color:var(--accent)">${slug}</span> skill to <em style="color:var(--muted)">ketik tugasmu di atas...</em>`;
-  document.getElementById('modal-copy-btn').textContent = '📋 Copy & Siap Paste ke Antigravity';
-  document.getElementById('modal-copy-btn').classList.remove('copied');
-  document.getElementById('modal').classList.add('show');
-  setTimeout(() => document.getElementById('modal-task').focus(), 100);
-}
+      <!-- Autonomous Multi-Agent Command Deck -->
+      <div class="hq-command-deck">
+        <div class="command-deck-header">
+          <div>
+            <div class="deck-title">
+              <span>🚀 Dek Komando Multi-Agen</span>
+              <span style="font-size: 10px; background: rgba(224, 104, 71, 0.2); color: var(--claude-accent); padding: 2px 7px; border-radius: 999px;">AUTONOMOUS SWARM</span>
+            </div>
+            <div class="deck-subtitle">Satu perintah → Tim agen bekerja otomatis dari hulu ke hilir</div>
+          </div>
+        </div>
 
-function updateModalCommand() {
-  const task = document.getElementById('modal-task').value.trim();
-  const cmd  = document.getElementById('modal-command');
-  if (task) {
-    cmd.textContent = `Use the ${currentModalSlug} skill to ${task}`;
-  } else {
-    cmd.innerHTML = `Use the <span style="color:var(--accent)">${currentModalSlug}</span> skill to <em style="color:var(--muted)">ketik tugasmu di atas...</em>`;
-  }
-}
+        <div class="autonomous-prompt-box">
+          <textarea
+            id="swarm-goal-input"
+            class="auto-textarea"
+            placeholder="Perintahkan tim multi-agen Anda (contoh: Bangun aplikasi marketplace e-commerce lengkap dengan UI modern, backend API, dan audit keamanan)..."
+          ></textarea>
+          <button id="launch-swarm-btn" class="btn-launch-swarm" onclick="launchAutonomousSwarm()">
+            <span>🚀 Eksekusi Proyek Otonom</span>
+          </button>
+        </div>
 
-function copyModalCommand() {
-  const task = document.getElementById('modal-task').value.trim();
-  const text = task ? `Use the ${currentModalSlug} skill to ${task}` : `Use the ${currentModalSlug} skill`;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('modal-copy-btn');
-    btn.textContent = '✅ Tersalin! Buka Antigravity & Paste';
-    btn.classList.add('copied');
-    showToast();
-    setTimeout(() => {
-      btn.textContent = '📋 Copy & Siap Paste ke Antigravity';
-      btn.classList.remove('copied');
-    }, 3000);
-  });
-}
+        <!-- Swarm Execution Live Feed -->
+        <div class="swarm-timeline" id="swarm-timeline">
+          <div style="padding: 40px 20px; text-align: center; color: var(--text-dim); font-size: 13px;">
+            <div style="font-size: 32px; margin-bottom: 12px;">🏢</div>
+            <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);">Belum ada proyek berjalan</div>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+              Tuliskan instruksi di atas lalu klik tombol eksekusi. Tim spesialis (Product Manager, Designer, Engineer, Security) akan otomatis berkolaborasi menyelesaikan proyek Anda di gedung 3D!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-function closeModal() { document.getElementById('modal').classList.remove('show'); }
-function closeModalOutside(e) { if (e.target === document.getElementById('modal')) closeModal(); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  </div>
 
-// =====================================================================
-// COPY SLUG
-// =====================================================================
-function copySlug(btn, slug) {
-  navigator.clipboard.writeText(slug).then(() => {
-    btn.classList.add('copied'); btn.textContent = '✅';
-    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 1800);
-  });
-}
+  <!-- =====================================================================
+       AGENT DIRECTORY MODAL
+       ===================================================================== -->
+  <div class="directory-modal-overlay" id="directory-modal" onclick="closeDirectoryOutside(event)">
+    <div class="directory-card">
+      <div class="directory-header">
+        <div class="directory-title">
+          <h3>Direktori Agen Spesialis</h3>
+          <p>Pilih dari 270+ pakar AI profesional yang siap bekerja sama dengan Anda</p>
+        </div>
+        <button class="icon-btn" onclick="closeDirectoryModal()">✕</button>
+      </div>
 
-// =====================================================================
-// TOAST
-// =====================================================================
-let toastTimer;
-function showToast() {
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
-}
+      <div class="directory-search-bar">
+        <span style="color: var(--text-dim);">🔍</span>
+        <input
+          type="text"
+          id="directory-search-input"
+          class="directory-search-input"
+          placeholder="Cari spesialis berdasarkan keahlian (contoh: SEO, React, Security, Game, UI)..."
+        />
+      </div>
 
-// =====================================================================
-// SEARCH
-// =====================================================================
-document.getElementById('search').addEventListener('input', e => {
-  searchTerm = e.target.value;
-  document.getElementById('clear-btn').classList.toggle('show', !!searchTerm);
-  renderGrid();
-});
-function clearSearch() {
-  document.getElementById('search').value = '';
-  searchTerm = '';
-  document.getElementById('clear-btn').classList.remove('show');
-  renderGrid();
-}
+      <div class="directory-divisions-scroll" id="directory-division-tabs"></div>
+      <div class="directory-grid" id="directory-grid"></div>
+    </div>
+  </div>
 
-// =====================================================================
-// INIT
-// =====================================================================
-buildStats();
-populateSelect();
-buildFilters();
-renderGrid();
-</script>
+  <!-- =====================================================================
+       LIVE ARTIFACTS DRAWER (CLAUDE CANVAS PREVIEW)
+       ===================================================================== -->
+  <aside class="artifact-drawer" id="artifact-drawer">
+    <div class="artifact-drawer-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 18px;">🚀</span>
+        <div>
+          <div style="font-size: 13.5px; font-weight: 700;" id="drawer-app-title">Live Application</div>
+          <div style="font-size: 11px; color: var(--text-dim);">Interactive Web Sandbox</div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <button class="btn-artifact" onclick="reloadDrawerIframe()" title="Refresh">🔄</button>
+        <button class="btn-artifact" onclick="openDrawerInNewTab()" title="Buka Tab Baru">↗️ Tab Baru</button>
+        <button class="btn-artifact" onclick="downloadDrawerHtml()" title="Unduh File">💾 Unduh</button>
+        <button class="btn-artifact" onclick="closeArtifactDrawer()" style="color: var(--claude-accent);">✕ Tutup</button>
+      </div>
+    </div>
+
+    <div class="artifact-drawer-body">
+      <iframe id="drawer-iframe" class="artifact-iframe" sandbox="allow-scripts allow-modals allow-forms allow-same-origin"></iframe>
+    </div>
+  </aside>
+
+  <!-- =====================================================================
+       SETTINGS MODAL
+       ===================================================================== -->
+  <div class="settings-modal-overlay" id="settings-modal" onclick="closeSettingsOutside(event)">
+    <div class="settings-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-family: 'Newsreader', serif; font-size: 22px;">Pengaturan AI & Model</h3>
+        <button class="icon-btn" onclick="closeSettingsModal()">✕</button>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">
+        Koneksikan Google Gemini API Key Anda. Agen akan otomatis menggunakan model generasi terbaru yang aktif.
+      </p>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-dim); margin-bottom: 6px;">
+          GOOGLE GEMINI API KEY
+        </label>
+        <input
+          type="password"
+          id="gemini-key-input"
+          style="width: 100%; background: var(--bg-chat); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 10px; font-size: 13.5px; outline: none;"
+          placeholder="AIzaSy..."
+        />
+        <small style="display: block; margin-top: 6px; font-size: 11px; color: var(--text-dim);">
+          Belum punya key? <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--claude-accent); text-decoration: none; font-weight: 600;">Dapatkan gratis di Google AI Studio ↗</a>
+        </small>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+        <button class="btn-artifact" onclick="closeSettingsModal()">Batal</button>
+        <button class="btn-artifact btn-artifact-preview" onclick="saveSettings()">Simpan Pengaturan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       JAVASCRIPT: CORE + 3D MOTION ENGINE + SWARM ORCHESTRATION
+       ===================================================================== -->
+  <script>
+    // Global State
+    let allAgents = [];
+    let currentAgent = null;
+    let chatHistories = {};
+    let isGenerating = false;
+    let windowCodeSnippets = [];
+    let mentionQuery = '';
+    let mentionFocusIndex = 0;
+    let activeDirectoryDivision = 'all';
+
+    // Division Color Mapping
+    const DIV_COLORS = {
+      engineering: '#3b82f6',
+      design: '#a855f7',
+      marketing: '#f59e0b',
+      sales: '#10b981',
+      finance: '#06b6d4',
+      security: '#ef4444',
+      product: '#f97316',
+      research: '#ec4899',
+      'game-development': '#7c3aed',
+      gis: '#059669',
+      healthcare: '#0ea5e9',
+      testing: '#84cc16',
+      support: '#64748b',
+      'project-management': '#b45309',
+      'paid-media': '#db2777',
+      'spatial-computing': '#6366f1',
+      academic: '#0369a1',
+      strategy: '#b91c1c',
+      specialized: '#d97706'
+    };
+
+    // =====================================================================
+    // APP INITIALIZATION
+    // =====================================================================
+    async function initApp() {
+      try {
+        const res = await fetch('/api/agents');
+        const data = await res.json();
+        allAgents = data.agents || [];
+
+        document.getElementById('total-agents-badge').textContent = allAgents.length;
+
+        renderDirectoryDivisionTabs();
+        renderDirectoryGrid();
+        renderRecentAgentsSidebar();
+
+        const defaultAgent = allAgents.find(a => a.id.includes('frontend-developer')) || allAgents[0];
+        if (defaultAgent) {
+          selectAgent(defaultAgent.id);
+        }
+      } catch (err) {
+        console.error('Failed to load agents:', err);
+      }
+    }
+
+    // View Switching: 'chat' | '3d-hq'
+    function switchView(viewName) {
+      const viewChat = document.getElementById('view-chat');
+      const view3dHq = document.getElementById('view-3d-hq');
+
+      if (viewName === '3d-hq') {
+        viewChat.style.display = 'none';
+        view3dHq.classList.add('active-view');
+        init3DSceneIfNeeded();
+      } else {
+        view3dHq.classList.remove('active-view');
+        viewChat.style.display = 'flex';
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+      if (renderer) onWindowResize();
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      document.getElementById('theme-btn').textContent = nextTheme === 'dark' ? '🌙' : '☀️';
+    }
+
+    // =====================================================================
+    // 3D VIRTUAL AGENCY HEADQUARTERS ENGINE (THREE.JS)
+    // =====================================================================
+    let scene, camera, renderer, controls;
+    let is3DInitialized = false;
+    let animatedCharacters = [];
+    let serverRacks = [];
+    let collaborationBeams = [];
+    let departmentLocations = {};
+
+    function init3DSceneIfNeeded() {
+      if (is3DInitialized) return;
+      is3DInitialized = true;
+
+      const container = document.getElementById('hq-canvas-container');
+      const canvas = document.getElementById('three-canvas');
+
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      // 1. Scene & Camera
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a0f1d);
+      scene.fog = new THREE.FogExp2(0x0a0f1d, 0.015);
+
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+      camera.position.set(38, 28, 45);
+
+      // 2. Renderer
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      // 3. Orbit Controls
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2 - 0.05;
+      controls.target.set(0, 10, 0);
+
+      // 4. Lights
+      const ambientLight = new THREE.AmbientLight(0xdbeafe, 0.6);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+      dirLight.position.set(30, 60, 40);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 2048;
+      dirLight.shadow.mapSize.height = 2048;
+      scene.add(dirLight);
+
+      // Colored department accent lights
+      const blueLight = new THREE.PointLight(0x3b82f6, 2, 35);
+      blueLight.position.set(-10, 12, 0);
+      scene.add(blueLight);
+
+      const orangeLight = new THREE.PointLight(0xe06847, 2.5, 35);
+      orangeLight.position.set(0, 22, 0);
+      scene.add(orangeLight);
+
+      const purpleLight = new THREE.PointLight(0xa855f7, 2, 35);
+      purpleLight.position.set(12, 12, 0);
+      scene.add(purpleLight);
+
+      // 5. Build 3D Architecture, People & Tools
+      build3DGround();
+      build3DOfficeBuilding();
+      build3DDepartments();
+
+      // 6. Window Resize
+      window.addEventListener('resize', onWindowResize);
+
+      // 7. Start Animation Loop
+      animate3D();
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('hq-canvas-container');
+      if (!container || !renderer || !camera) return;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    // 3D Ground & Grid
+    function build3DGround() {
+      const groundGeo = new THREE.PlaneGeometry(200, 200);
+      const groundMat = new THREE.MeshStandardMaterial({
+        color: 0x070b14,
+        roughness: 0.8,
+        metalness: 0.2
+      });
+      const ground = new THREE.Mesh(groundGeo, groundMat);
+      ground.rotation.x = -Math.PI / 2;
+      ground.receiveShadow = true;
+      scene.add(ground);
+
+      // Cyber Grid
+      const grid = new THREE.GridHelper(160, 40, 0x1e293b, 0x0f172a);
+      grid.position.y = 0.05;
+      scene.add(grid);
+    }
+
+    // 3D Glass & Steel Headquarters Building
+    function build3DOfficeBuilding() {
+      const buildingGroup = new THREE.Group();
+
+      // Concrete Foundation Podium
+      const podiumGeo = new THREE.BoxGeometry(44, 2, 34);
+      const podiumMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.5 });
+      const podium = new THREE.Mesh(podiumGeo, podiumMat);
+      podium.position.y = 1;
+      podium.receiveShadow = true;
+      buildingGroup.add(podium);
+
+      // 3 Main Floors (Slabs)
+      const floorGeo = new THREE.BoxGeometry(40, 0.8, 30);
+      const floorMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.3, metalness: 0.6 });
+
+      for (let f = 1; f <= 3; f++) {
+        const floorMesh = new THREE.Mesh(floorGeo, floorMat);
+        floorMesh.position.y = f * 8;
+        floorMesh.receiveShadow = true;
+        buildingGroup.add(floorMesh);
+
+        // Glass Perimeter Balustrades
+        const glassGeo = new THREE.BoxGeometry(39.8, 2.5, 29.8);
+        const glassMat = new THREE.MeshPhysicalMaterial({
+          color: 0x93c5fd,
+          transparent: true,
+          opacity: 0.15,
+          roughness: 0.1,
+          transmission: 0.9,
+          thickness: 1.2
+        });
+        const glass = new THREE.Mesh(glassGeo, glassMat);
+        glass.position.y = (f * 8) - 4;
+        buildingGroup.add(glass);
+      }
+
+      // Structural Steel Columns
+      const colGeo = new THREE.CylinderGeometry(0.5, 0.5, 26, 16);
+      const colMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.2 });
+
+      const colPositions = [
+        [-19, 13, -14], [19, 13, -14],
+        [-19, 13, 14],  [19, 13, 14],
+        [0, 13, -14],   [0, 13, 14]
+      ];
+
+      colPositions.forEach(([x, y, z]) => {
+        const col = new THREE.Mesh(colGeo, colMat);
+        col.position.set(x, y, z);
+        col.castShadow = true;
+        buildingGroup.add(col);
+      });
+
+      // Roof Helipad & Antenna
+      const helipadGeo = new THREE.CylinderGeometry(6, 6, 0.4, 32);
+      const helipadMat = new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.5 });
+      const helipad = new THREE.Mesh(helipadGeo, helipadMat);
+      helipad.position.set(0, 24.4, 0);
+      buildingGroup.add(helipad);
+
+      const antennaGeo = new THREE.CylinderGeometry(0.1, 0.3, 12, 8);
+      const antennaMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.9 });
+      const antenna = new THREE.Mesh(antennaGeo, antennaMat);
+      antenna.position.set(-14, 30, -10);
+      buildingGroup.add(antenna);
+
+      scene.add(buildingGroup);
+    }
+
+    // 3D Departments with People and Work Tools
+    function build3DDepartments() {
+      // 1. Executive Boardroom (Top Floor: Y = 16)
+      departmentLocations.boardroom = new THREE.Vector3(0, 16, 0);
+      createBoardroom(0, 16, 0);
+
+      // 2. Engineering & Code Lab (Main Floor Left: Y = 8, X = -10)
+      departmentLocations.engineering = new THREE.Vector3(-10, 8, 2);
+      createEngineeringLab(-10, 8, 2);
+
+      // 3. Creative Design Suite (Upper Floor Right: Y = 16, X = 10)
+      departmentLocations.design = new THREE.Vector3(10, 16, 2);
+      createDesignSuite(10, 16, 2);
+
+      // 4. Security & QA Vault (Main Floor Right: Y = 8, X = 10)
+      departmentLocations.security = new THREE.Vector3(10, 8, -4);
+      createSecurityVault(10, 8, -4);
+
+      // Department Overview Anchor
+      departmentLocations.overview = new THREE.Vector3(0, 12, 0);
+    }
+
+    // --- DEPT 1: Executive Boardroom ---
+    function createBoardroom(x, y, z) {
+      const group = new THREE.Group();
+      group.position.set(x, y, z);
+
+      // Conference Table (Polished Mahogany)
+      const tableGeo = new THREE.BoxGeometry(10, 0.4, 5);
+      const tableMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.2, metalness: 0.3 });
+      const table = new THREE.Mesh(tableGeo, tableMat);
+      table.position.y = 2.4;
+      table.castShadow = true;
+      group.add(table);
+
+      // Table legs
+      const legGeo = new THREE.CylinderGeometry(0.2, 0.2, 2.2, 8);
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x0f172a });
+      [[-4.5, 1.1, -2], [4.5, 1.1, -2], [-4.5, 1.1, 2], [4.5, 1.1, 2]].forEach(([lx, ly, lz]) => {
+        const leg = new THREE.Mesh(legGeo, legMat);
+        leg.position.set(lx, ly, lz);
+        group.add(leg);
+      });
+
+      // Holographic Projector Centerpiece
+      const holoGeo = new THREE.CylinderGeometry(0.8, 0.8, 0.1, 16);
+      const holoMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0284c7 });
+      const holo = new THREE.Mesh(holoGeo, holoMat);
+      holo.position.y = 2.65;
+      group.add(holo);
+
+      // Rotating Hologram Core
+      const coreGeo = new THREE.OctahedronGeometry(0.7);
+      const coreMat = new THREE.MeshStandardMaterial({
+        color: 0x38bdf8,
+        wireframe: true,
+        emissive: 0x38bdf8
+      });
+      const core = new THREE.Mesh(coreGeo, coreMat);
+      core.position.y = 3.8;
+      group.add(core);
+
+      // Animate core
+      animatedCharacters.push({
+        mesh: core,
+        animate: (t) => {
+          core.rotation.y = t * 1.5;
+          core.rotation.x = Math.sin(t) * 0.3;
+        }
+      });
+
+      // Add Product Manager & Executive 3D Person
+      create3DHuman(group, 0, 0, -3.5, 0xe06847, 'Product Manager', 'boardroom');
+      create3DHuman(group, -3.5, 0, 0, 0xd97706, 'Strategist', 'boardroom');
+
+      scene.add(group);
+    }
+
+    // --- DEPT 2: Engineering Lab (Workstations, Dual Monitors, Servers) ---
+    function createEngineeringLab(x, y, z) {
+      const group = new THREE.Group();
+      group.position.set(x, y, z);
+
+      // Modern Programmer Desks
+      createWorkstation(group, -3, 0, 0, 0x3b82f6, 'Frontend Dev', 'engineering');
+      createWorkstation(group, 3, 0, 0, 0x2563eb, 'Backend Arch', 'engineering');
+
+      // Server Racks with Blinking Animated LEDs
+      createServerRack(group, -5, 0, -5);
+      createServerRack(group, -2.5, 0, -5);
+
+      scene.add(group);
+    }
+
+    // --- DEPT 3: Creative Design Suite ---
+    function createDesignSuite(x, y, z) {
+      const group = new THREE.Group();
+      group.position.set(x, y, z);
+
+      // Designer drafting table & drawing tablet
+      createWorkstation(group, 0, 0, 0, 0xa855f7, 'UI/UX Designer', 'design');
+
+      // Floating Color Swatch Wall
+      const boardGeo = new THREE.BoxGeometry(6, 3, 0.2);
+      const boardMat = new THREE.MeshStandardMaterial({ color: 0x1e1b4b, roughness: 0.6 });
+      const board = new THREE.Mesh(boardGeo, boardMat);
+      board.position.set(0, 3.5, -4);
+      group.add(board);
+
+      scene.add(group);
+    }
+
+    // --- DEPT 4: Security Vault ---
+    function createSecurityVault(x, y, z) {
+      const group = new THREE.Group();
+      group.position.set(x, y, z);
+
+      // Vault Station & Security Engineer
+      createWorkstation(group, 0, 0, 0, 0xef4444, 'Security Architect', 'security');
+
+      // Floating Armored Cryptographic Shield Cube
+      const shieldGeo = new THREE.BoxGeometry(1.4, 1.4, 1.4);
+      const shieldMat = new THREE.MeshStandardMaterial({
+        color: 0xef4444,
+        wireframe: true,
+        emissive: 0xef4444
+      });
+      const shield = new THREE.Mesh(shieldGeo, shieldMat);
+      shield.position.set(0, 4.5, -3);
+      group.add(shield);
+
+      animatedCharacters.push({
+        mesh: shield,
+        animate: (t) => {
+          shield.rotation.y = t * 2;
+          shield.rotation.z = Math.cos(t) * 0.5;
+        }
+      });
+
+      scene.add(group);
+    }
+
+    // 3D Workstation (Desk, Dual Curved Monitors, Chair, Computer, Keyboard)
+    function createWorkstation(parent, x, y, z, accentColor, roleName, deptKey) {
+      const group = new THREE.Group();
+      group.position.set(x, y, z);
+
+      // Desk
+      const deskTopGeo = new THREE.BoxGeometry(4.2, 0.2, 2.2);
+      const deskTopMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3 });
+      const desk = new THREE.Mesh(deskTopGeo, deskTopMat);
+      desk.position.y = 2.2;
+      desk.castShadow = true;
+      group.add(desk);
+
+      // Desk frame legs
+      const frameGeo = new THREE.BoxGeometry(0.15, 2.2, 2);
+      const frameMat = new THREE.MeshStandardMaterial({ color: 0x0f172a });
+      const leftLeg = new THREE.Mesh(frameGeo, frameMat);
+      leftLeg.position.set(-1.9, 1.1, 0);
+      group.add(leftLeg);
+      const rightLeg = new THREE.Mesh(frameGeo, frameMat);
+      rightLeg.position.set(1.9, 1.1, 0);
+      group.add(rightLeg);
+
+      // Dual Computer Monitors
+      const screenMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+      const bezelMat = new THREE.MeshStandardMaterial({ color: 0x0f172a });
+
+      [-0.9, 0.9].forEach((sx, i) => {
+        // Monitor stand
+        const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.8), bezelMat);
+        stand.position.set(sx, 2.7, -0.6);
+        group.add(stand);
+
+        // Monitor Screen
+        const monitor = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.0, 0.08), bezelMat);
+        monitor.position.set(sx, 3.2, -0.6);
+        monitor.rotation.y = i === 0 ? 0.2 : -0.2;
+
+        const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 0.9), screenMat);
+        screen.position.z = 0.045;
+        monitor.add(screen);
+
+        group.add(monitor);
+      });
+
+      // Keyboard & Mouse
+      const kb = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.05, 0.4), bezelMat);
+      kb.position.set(0, 2.32, 0.2);
+      group.add(kb);
+
+      // Ergonomic Office Chair
+      const seat = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.2, 1.2), new THREE.MeshStandardMaterial({ color: 0x334155 }));
+      seat.position.set(0, 1.5, 1.2);
+      const back = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.4, 0.2), new THREE.MeshStandardMaterial({ color: 0x334155 }));
+      back.position.set(0, 2.2, 1.8);
+      group.add(seat);
+      group.add(back);
+
+      // Human Person Sitting & Working at Desk
+      create3DHuman(group, 0, 0, 1.2, accentColor, roleName, deptKey);
+
+      parent.add(group);
+    }
+
+    // 3D Stylized Human Character
+    function create3DHuman(parent, x, y, z, shirtColor, roleTitle, deptKey) {
+      const person = new THREE.Group();
+      person.position.set(x, y, z);
+      person.userData = { role: roleTitle, department: deptKey };
+
+      const skinMat = new THREE.MeshStandardMaterial({ color: 0xfbcfe8, roughness: 0.6 });
+      const clothesMat = new THREE.MeshStandardMaterial({ color: shirtColor, roughness: 0.4 });
+      const pantsMat = new THREE.MeshStandardMaterial({ color: 0x1e293b });
+
+      // Torso / Body
+      const torso = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.1, 0.5), clothesMat);
+      torso.position.y = 2.1;
+      person.add(torso);
+
+      // Head
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.38, 16, 16), skinMat);
+      head.position.y = 2.95;
+      person.add(head);
+
+      // Hair
+      const hair = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.3, 0.8), new THREE.MeshStandardMaterial({ color: 0x1e1b4b }));
+      hair.position.y = 3.2;
+      person.add(hair);
+
+      // Arms (in typing posture forward)
+      const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.7, 0.2), clothesMat);
+      leftArm.position.set(-0.55, 2.1, -0.2);
+      leftArm.rotation.x = -Math.PI / 4;
+      person.add(leftArm);
+
+      const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.7, 0.2), clothesMat);
+      rightArm.position.set(0.55, 2.1, -0.2);
+      rightArm.rotation.x = -Math.PI / 4;
+      person.add(rightArm);
+
+      // Legs
+      const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.2, 0.3), pantsMat);
+      leftLeg.position.set(-0.25, 0.9, 0);
+      person.add(leftLeg);
+      const rightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.2, 0.3), pantsMat);
+      rightLeg.position.set(0.25, 0.9, 0);
+      person.add(rightLeg);
+
+      // Floating Holographic Role Ring
+      const ringGeo = new THREE.RingGeometry(0.7, 0.8, 24);
+      const ringMat = new THREE.MeshBasicMaterial({ color: shirtColor, side: THREE.DoubleSide });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.y = 3.6;
+      ring.rotation.x = Math.PI / 2;
+      person.add(ring);
+
+      // Animate character typing and breathing
+      animatedCharacters.push({
+        mesh: person,
+        role: roleTitle,
+        dept: deptKey,
+        animate: (t) => {
+          // Subtle breathing
+          torso.position.y = 2.1 + Math.sin(t * 3) * 0.03;
+          head.position.y = 2.95 + Math.sin(t * 3) * 0.03;
+          // Typing arm micro-motion
+          leftArm.rotation.x = -Math.PI / 4 + Math.sin(t * 8) * 0.08;
+          rightArm.rotation.x = -Math.PI / 4 + Math.cos(t * 8) * 0.08;
+          // Spinning ring
+          ring.rotation.z = t * 1.2;
+        }
+      });
+
+      parent.add(person);
+    }
+
+    // 3D Server Rack with Blinking Animated Status Lights
+    function createServerRack(parent, x, y, z) {
+      const rack = new THREE.Group();
+      rack.position.set(x, y, z);
+
+      const caseGeo = new THREE.BoxGeometry(2, 5.5, 1.5);
+      const caseMat = new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.4, metalness: 0.8 });
+      const tower = new THREE.Mesh(caseGeo, caseMat);
+      tower.position.y = 2.75;
+      tower.castShadow = true;
+      rack.add(tower);
+
+      // Array of LED points
+      const leds = [];
+      const ledGeo = new THREE.BoxGeometry(0.1, 0.08, 0.05);
+
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 4; c++) {
+          const isGreen = Math.random() > 0.3;
+          const ledMat = new THREE.MeshBasicMaterial({ color: isGreen ? 0x10b981 : 0x38bdf8 });
+          const led = new THREE.Mesh(ledGeo, ledMat);
+          led.position.set(-0.6 + c * 0.4, 1.2 + r * 0.5, 0.76);
+          rack.add(led);
+          leds.push({ mesh: led, isGreen: isGreen });
+        }
+      }
+
+      serverRacks.push(leds);
+      parent.add(rack);
+    }
+
+    // Camera Focus Department Smooth Transition (TWEEN)
+    function focusDepartment(deptKey, btn) {
+      document.querySelectorAll('.hq-dept-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      let targetPos, lookPos;
+
+      if (deptKey === 'boardroom') {
+        targetPos = { x: 12, y: 22, z: 16 };
+        lookPos = { x: 0, y: 18, z: 0 };
+      } else if (deptKey === 'engineering') {
+        targetPos = { x: -6, y: 14, z: 16 };
+        lookPos = { x: -10, y: 10, z: 2 };
+      } else if (deptKey === 'design') {
+        targetPos = { x: 18, y: 22, z: 14 };
+        lookPos = { x: 10, y: 18, z: 2 };
+      } else if (deptKey === 'security') {
+        targetPos = { x: 16, y: 13, z: 12 };
+        lookPos = { x: 10, y: 9, z: -4 };
+      } else {
+        // Overview
+        targetPos = { x: 38, y: 28, z: 45 };
+        lookPos = { x: 0, y: 10, z: 0 };
+      }
+
+      new TWEEN.Tween(camera.position)
+        .to(targetPos, 1200)
+        .easing(TWEEN.Easing.Cubic.Out)
+        .start();
+
+      new TWEEN.Tween(controls.target)
+        .to(lookPos, 1200)
+        .easing(TWEEN.Easing.Cubic.Out)
+        .start();
+    }
+
+    // Dynamic 3D Collaboration Handover Beam (Laser particles)
+    function triggerHandoverBeam(fromDept, toDept) {
+      const start = departmentLocations[fromDept] || departmentLocations.engineering;
+      const end = departmentLocations[toDept] || departmentLocations.boardroom;
+
+      const curve = new THREE.QuadraticBezierCurve3(
+        start.clone().add(new THREE.Vector3(0, 3, 0)),
+        new THREE.Vector3((start.x + end.x) / 2, Math.max(start.y, end.y) + 8, (start.z + end.z) / 2),
+        end.clone().add(new THREE.Vector3(0, 3, 0))
+      );
+
+      const points = curve.getPoints(50);
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      const material = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 3 });
+      const beamLine = new THREE.Line(geometry, material);
+      scene.add(beamLine);
+
+      // Glowing pulse ball traveling along the curve
+      const pulseMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x60a5fa })
+      );
+      scene.add(pulseMesh);
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 0.04;
+        if (progress >= 1) {
+          clearInterval(interval);
+          scene.remove(beamLine);
+          scene.remove(pulseMesh);
+        } else {
+          const pt = curve.getPoint(progress);
+          pulseMesh.position.copy(pt);
+        }
+      }, 30);
+    }
+
+    // Animation Loop
+    let clock = new THREE.Clock();
+
+    function animate3D() {
+      requestAnimationFrame(animate3D);
+
+      const elapsedTime = clock.getElapsedTime();
+
+      // Update Tween animations
+      TWEEN.update();
+
+      // Update Controls
+      if (controls) controls.update();
+
+      // Animate human characters & holographic cores
+      animatedCharacters.forEach(item => {
+        if (item.animate) item.animate(elapsedTime);
+      });
+
+      // Animate server LEDs blinking
+      if (Math.floor(elapsedTime * 6) % 2 === 0) {
+        serverRacks.forEach(rackLeds => {
+          const randomIdx = Math.floor(Math.random() * rackLeds.length);
+          const led = rackLeds[randomIdx];
+          if (led) {
+            led.mesh.material.color.setHex(led.isGreen ? 0x10b981 : 0x38bdf8);
+          }
+        });
+      }
+
+      if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
+    }
+
+    // =====================================================================
+    // AUTONOMOUS MULTI-AGENT SWARM ORCHESTRATION PIPELINE
+    // =====================================================================
+    async function launchAutonomousSwarm() {
+      const input = document.getElementById('swarm-goal-input');
+      const goal = input.value.trim();
+      if (!goal) return;
+
+      const apiKey = localStorage.getItem('agency_gemini_api_key');
+      if (!apiKey) {
+        openSettingsModal();
+        alert('Silakan masukkan Google Gemini API Key Anda terlebih dahulu.');
+        return;
+      }
+
+      const launchBtn = document.getElementById('launch-swarm-btn');
+      const timeline = document.getElementById('swarm-timeline');
+
+      launchBtn.disabled = true;
+      launchBtn.innerHTML = `<span>⏳ Mengorkestrasi Tim Agen...</span>`;
+
+      timeline.innerHTML = `
+        <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px;">
+          <div style="font-size: 24px; margin-bottom: 8px;">🧠</div>
+          <div style="font-weight: 700; color: var(--text);">Master Orchestrator sedang menganalisis tujuan Anda...</div>
+          <p style="font-size: 11.5px; color: var(--text-dim); margin-top: 4px;">Menentukan spesialis terbaik & menyusun alur kerja kolaboratif.</p>
+        </div>
+      `;
+
+      try {
+        const res = await fetch('/api/orchestrate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goal: goal, apiKey: apiKey })
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || 'Orchestration failed');
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const dataStr = line.slice(6).trim();
+              if (dataStr === '[DONE]') break;
+              try {
+                const event = JSON.parse(dataStr);
+                handleSwarmEvent(event);
+              } catch (_) {}
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Swarm error:', err);
+        timeline.innerHTML += `<div style="color: #ef4444; font-size: 13px; padding: 12px;">⚠️ Error: ${err.message}</div>`;
+      } finally {
+        launchBtn.disabled = false;
+        launchBtn.innerHTML = `<span>🚀 Eksekusi Proyek Otonom</span>`;
+      }
+    }
+
+    function handleSwarmEvent(event) {
+      const timeline = document.getElementById('swarm-timeline');
+
+      if (event.type === 'plan_ready') {
+        timeline.innerHTML = `
+          <div style="background: var(--surface-hover); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 8px;">
+            <div style="font-size: 14px; font-weight: 800; color: var(--claude-accent);">📋 ${event.plan.title}</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">${event.plan.summary}</div>
+          </div>
+        `;
+      } else if (event.type === 'agent_start') {
+        // Focus 3D camera to department!
+        if (event.department) {
+          focusDepartment(event.department);
+        }
+
+        const color = DIV_COLORS[event.department] || '#e06847';
+        const cardId = `step-card-${event.stepIndex}`;
+
+        const card = document.createElement('div');
+        card.id = cardId;
+        card.className = 'swarm-step-card active-step';
+        card.innerHTML = `
+          <div class="step-card-header">
+            <div class="step-agent-info">
+              <div class="step-agent-avatar" style="background:${color}">${event.role[0]}</div>
+              <div>
+                <div class="step-agent-name">${event.role}</div>
+                <div style="font-size: 10px; color: #10b981; font-weight: 700;">● SEDANG BEKERJA OTONOM</div>
+              </div>
+            </div>
+            <div class="step-dept-tag">${event.department}</div>
+          </div>
+          <div class="step-task-desc"><strong>Tugas:</strong> ${event.task}</div>
+          <div class="step-output-box" id="step-output-${event.stepIndex}">Sedang memproses dan menyusun solusi...</div>
+        `;
+
+        timeline.appendChild(card);
+        timeline.scrollTop = timeline.scrollHeight;
+      } else if (event.type === 'agent_chunk') {
+        const outBox = document.getElementById(`step-output-${event.stepIndex}`);
+        if (outBox) {
+          if (outBox.textContent.includes('Sedang memproses')) outBox.textContent = '';
+          outBox.textContent += event.text;
+          outBox.scrollTop = outBox.scrollHeight;
+        }
+      } else if (event.type === 'agent_done') {
+        const card = document.getElementById(`step-card-${event.stepIndex}`);
+        if (card) {
+          card.classList.remove('active-step');
+          const statusEl = card.querySelector('.step-agent-info div div:nth-child(2)');
+          if (statusEl) {
+            statusEl.textContent = '✓ SELESAI';
+            statusEl.style.color = '#38bdf8';
+          }
+          // If code was generated, add Preview button
+          if (event.output && /```html/i.test(event.output)) {
+            const previewBtn = document.createElement('button');
+            previewBtn.className = 'btn-artifact btn-artifact-preview';
+            previewBtn.style.marginTop = '8px';
+            previewBtn.innerHTML = '▶️ Buka Hasil Aplikasi di Claude Canvas';
+            previewBtn.onclick = () => {
+              const match = event.output.match(/```html\n([\s\S]*?)```/i);
+              if (match) {
+                windowCodeSnippets = [match[1]];
+                openArtifactDrawer(0);
+              }
+            };
+            card.appendChild(previewBtn);
+          }
+        }
+      } else if (event.type === 'handover') {
+        // Trigger 3D Laser Beam animation across the building!
+        triggerHandoverBeam(event.fromDept, event.toDept);
+
+        const handoverCard = document.createElement('div');
+        handoverCard.className = 'handover-card';
+        handoverCard.innerHTML = `
+          <span style="font-size: 16px;">⚡</span>
+          <span><strong>Handover Otonom:</strong> ${event.message}</span>
+        `;
+        timeline.appendChild(handoverCard);
+        timeline.scrollTop = timeline.scrollHeight;
+      } else if (event.type === 'orchestration_complete') {
+        const doneCard = document.createElement('div');
+        doneCard.style.padding = '16px';
+        doneCard.style.background = 'rgba(16, 185, 129, 0.15)';
+        doneCard.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+        doneCard.style.borderRadius = '12px';
+        doneCard.style.textAlign = 'center';
+        doneCard.innerHTML = `
+          <div style="font-size: 24px; margin-bottom: 6px;">🎉</div>
+          <div style="font-size: 14px; font-weight: 800; color: #34d399;">Proyek Multi-Agen Berhasil Diselesaikan!</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Semua agen telah bekerja sama dan menghasilkan deliverable terpadu.</div>
+        `;
+        timeline.appendChild(doneCard);
+        timeline.scrollTop = timeline.scrollHeight;
+      }
+    }
+
+    // =====================================================================
+    // 1-ON-1 CHAT LOGIC (CLAUDE MODE)
+    // =====================================================================
+    function selectAgent(agentId) {
+      currentAgent = allAgents.find(a => a.id === agentId);
+      if (!currentAgent) return;
+
+      const name = currentAgent.name || currentAgent.id || 'Agent';
+
+      document.getElementById('top-agent-name').textContent = name;
+      document.getElementById('tag-agent-name').textContent = `@ ${name}`;
+
+      renderRecentAgentsSidebar();
+      renderChatStream();
+      closeDirectoryModal();
+      hideMentionPopup();
+
+      document.getElementById('claude-input').focus();
+    }
+
+    function renderRecentAgentsSidebar() {
+      const listEl = document.getElementById('recent-agents-list');
+      const curated = [
+        'engineering-frontend-developer',
+        'engineering-backend-architect',
+        'security-security-architect',
+        'design-ui-designer',
+        'marketing-seo-specialist',
+        'product-product-manager',
+        'research-research-synthesist',
+        'sales-sales-coach'
+      ];
+
+      const featured = allAgents.filter(a => curated.some(c => a.id.includes(c))).slice(0, 8);
+      const displayList = featured.length ? featured : allAgents.slice(0, 8);
+
+      listEl.innerHTML = displayList.map(a => {
+        const div = a.division || 'general';
+        const name = a.name || a.id;
+        const color = DIV_COLORS[div] || '#e06847';
+        const initials = name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'AG';
+        const isActive = currentAgent && currentAgent.id === a.id;
+
+        return `
+          <div class="recent-agent-item ${isActive ? 'active' : ''}" onclick="selectAgent('${a.id}')">
+            <div class="recent-agent-avatar" style="background:${color}">${initials}</div>
+            <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${name}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderChatStream() {
+      windowCodeSnippets = [];
+      const stream = document.getElementById('chat-stream');
+      if (!currentAgent) return;
+
+      const messages = chatHistories[currentAgent.id] || [];
+      const div = currentAgent.division || 'general';
+      const name = currentAgent.name || currentAgent.id || 'Spesialis';
+      const color = DIV_COLORS[div] || '#e06847';
+      const initials = name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'AG';
+
+      if (messages.length === 0) {
+        stream.innerHTML = `
+          <div class="claude-hero">
+            <div class="claude-hero-spark">✳</div>
+            <h1 class="claude-greeting">Halo, saya ${name}</h1>
+            <p class="claude-subgreeting">
+              ${currentAgent.description || 'Pakar AI yang berfokus pada hasil produksi nyata, kode berkualitas tinggi, dan solusi teruji.'}
+            </p>
+
+            <div class="claude-hero-commands">
+              <span>💡 Tip: Ketik</span>
+              <span class="command-tag">@</span>
+              <span>atau</span>
+              <span class="command-tag">/</span>
+              <span>kapan saja untuk beralih spesialis</span>
+            </div>
+
+            <div class="claude-starters-grid">
+              <div class="claude-starter-card" onclick="useStarterPrompt('Apa saja deliverable dan kemampuan utama yang bisa kamu buatkan untuk saya?')">
+                <div class="starter-agent-label">Kemampuan & Deliverables</div>
+                <div class="starter-text">Apa saja keahlian dan deliverable yang bisa kamu buatkan?</div>
+              </div>
+              <div class="claude-starter-card" onclick="useStarterPrompt('Buatkan saya aplikasi interaktif lengkap modern dengan desain yang sangat estetis dan fungsional.')">
+                <div class="starter-agent-label">Buat Aplikasi Nyata</div>
+                <div class="starter-text">Buatkan aplikasi web interaktif lengkap yang bisa saya coba sekarang.</div>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      stream.innerHTML = messages.map(msg => {
+        const isUser = msg.role === 'user';
+        if (isUser) {
+          return `
+            <div class="msg-row user">
+              <div class="msg-content-wrapper">
+                <div class="msg-bubble">${escapeHtml(msg.content).replace(/\n/g, '<br/>')}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="msg-row agent">
+              <div class="msg-avatar" style="background:${color}">${initials}</div>
+              <div class="msg-content-wrapper">
+                <div class="msg-author-tag">
+                  <span>${name}</span>
+                  <span class="msg-division-badge">${div}</span>
+                </div>
+                <div class="msg-bubble">${formatClaudeMarkdown(msg.content)}</div>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function useStarterPrompt(text) {
+      document.getElementById('claude-input').value = text;
+      sendMessage();
+    }
+
+    function startNewChat() {
+      if (currentAgent) {
+        chatHistories[currentAgent.id] = [];
+        renderChatStream();
+      }
+      document.getElementById('claude-input').focus();
+    }
+
+    function clearCurrentChat() {
+      if (currentAgent && confirm(`Bersihkan percakapan dengan ${currentAgent.name}?`)) {
+        chatHistories[currentAgent.id] = [];
+        renderChatStream();
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function formatClaudeMarkdown(text) {
+      if (!text) return '';
+      let escaped = escapeHtml(text);
+
+      escaped = escaped.replace(/```([a-z0-9_-]*)\n([\s\S]*?)```/gi, (match, lang, code) => {
+        const rawCode = code.trim();
+        const snippetIndex = windowCodeSnippets.length;
+        windowCodeSnippets.push(rawCode);
+
+        const isWebCode = /html|xml|svg/i.test(lang) || /&lt;(html|doctype|div|body|script|style|section|nav|button|form|input|main)/i.test(rawCode);
+        const cardTitle = isWebCode ? 'Interactive Web Application' : `${(lang || 'code').toUpperCase()} Snippet`;
+
+        return `
+          <div class="claude-artifact-card">
+            <div class="artifact-card-header">
+              <div class="artifact-info">
+                <span style="font-size:16px;">${isWebCode ? '⚡' : '📄'}</span>
+                <span style="font-size:13px; font-weight:700;">${cardTitle}</span>
+              </div>
+              <div class="artifact-actions">
+                <button class="btn-artifact" onclick="copySnippet(${snippetIndex})">📋 Salin</button>
+                ${isWebCode ? `<button class="btn-artifact btn-artifact-preview" onclick="openArtifactDrawer(${snippetIndex})">▶️ Buka Live Preview</button>` : ''}
+              </div>
+            </div>
+            <div class="artifact-code-body">
+              <pre><code>${rawCode}</code></pre>
+            </div>
+          </div>
+        `;
+      });
+
+      escaped = escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
+      escaped = escaped.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      escaped = escaped.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      escaped = escaped.replace(/^\s*[-*]\s+(.+)$/gm, '<li>$1</li>');
+      escaped = escaped.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+
+      return escaped.split(/\n\n+/).map(p => {
+        if (p.startsWith('<div class="claude-artifact-card"') || p.startsWith('<ul>')) return p;
+        return `<p>${p.replace(/\n/g, '<br/>')}</p>`;
+      }).join('');
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('claude-input');
+      const text = input.value.trim();
+      if (!text || isGenerating || !currentAgent) return;
+
+      const apiKey = localStorage.getItem('agency_gemini_api_key');
+      if (!apiKey) {
+        openSettingsModal();
+        alert('Silakan masukkan Google Gemini API Key Anda untuk memulai.');
+        return;
+      }
+
+      if (!chatHistories[currentAgent.id]) {
+        chatHistories[currentAgent.id] = [];
+      }
+      chatHistories[currentAgent.id].push({ role: 'user', content: text });
+
+      input.value = '';
+      input.style.height = 'auto';
+      renderChatStream();
+
+      const stream = document.getElementById('chat-stream');
+      const typingRow = document.createElement('div');
+      typingRow.className = 'msg-row agent';
+      const div = currentAgent.division || 'general';
+      const name = currentAgent.name || currentAgent.id;
+      const color = DIV_COLORS[div] || '#e06847';
+      const initials = name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'AG';
+
+      typingRow.innerHTML = `
+        <div class="msg-avatar" style="background:${color}">${initials}</div>
+        <div class="msg-content-wrapper">
+          <div class="msg-author-tag">
+            <span>${name}</span>
+            <span class="msg-division-badge">${div}</span>
+          </div>
+          <div class="msg-bubble">
+            <div class="typing-dots">
+              <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+          </div>
+        </div>
+      `;
+      stream.appendChild(typingRow);
+      stream.scrollTop = stream.scrollHeight;
+
+      isGenerating = true;
+      document.getElementById('send-btn').disabled = true;
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            agentId: currentAgent.id,
+            messages: chatHistories[currentAgent.id],
+            apiKey: apiKey
+          })
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || 'Gagal memproses pesan.');
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let agentReply = '';
+        let streamBuffer = '';
+        const bubble = typingRow.querySelector('.msg-bubble');
+        bubble.innerHTML = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          streamBuffer += decoder.decode(value, { stream: true });
+          const lines = streamBuffer.split('\n');
+          streamBuffer = lines.pop();
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const dataText = line.slice(6).trim();
+              if (dataText === '[DONE]') break;
+              try {
+                const parsed = JSON.parse(dataText);
+                if (parsed.error) throw new Error(parsed.error);
+                if (parsed.text) {
+                  agentReply += parsed.text;
+                  bubble.innerHTML = formatClaudeMarkdown(agentReply);
+                  stream.scrollTop = stream.scrollHeight;
+                }
+              } catch (e) {
+                if (dataText.includes('error')) throw e;
+              }
+            }
+          }
+        }
+
+        chatHistories[currentAgent.id].push({ role: 'assistant', content: agentReply });
+
+      } catch (err) {
+        console.error('Chat error:', err);
+        const bubble = typingRow.querySelector('.msg-bubble');
+        bubble.innerHTML = `<span style="color:#ef4444;">⚠️ ${err.message}</span>`;
+      } finally {
+        isGenerating = false;
+        document.getElementById('send-btn').disabled = false;
+        input.focus();
+      }
+    }
+
+    // =====================================================================
+    // MENTION / SLASH POPUP (@ & /)
+    // =====================================================================
+    const inputEl = document.getElementById('claude-input');
+    const mentionPopup = document.getElementById('mention-popup');
+
+    inputEl.addEventListener('input', e => {
+      inputEl.style.height = 'auto';
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 160) + 'px';
+
+      const val = inputEl.value;
+      const cursorPos = inputEl.selectionStart;
+      const beforeCursor = val.slice(0, cursorPos);
+
+      const match = beforeCursor.match(/[@/]([a-zA-Z0-9_\-\s]*)$/);
+      if (match) {
+        mentionQuery = match[1].toLowerCase().trim();
+        showMentionPopup(mentionQuery);
+      } else {
+        hideMentionPopup();
+      }
+    });
+
+    inputEl.addEventListener('keydown', e => {
+      if (mentionPopup.classList.contains('show')) {
+        const items = document.querySelectorAll('.mention-item');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          mentionFocusIndex = (mentionFocusIndex + 1) % items.length;
+          updateMentionFocus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          mentionFocusIndex = (mentionFocusIndex - 1 + items.length) % items.length;
+          updateMentionFocus();
+        } else if (e.key === 'Enter' || e.key === 'Tab') {
+          e.preventDefault();
+          const focused = document.querySelector('.mention-item.focused');
+          if (focused) focused.click();
+        } else if (e.key === 'Escape') {
+          hideMentionPopup();
+        }
+        return;
+      }
+
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    function showMentionPopup(query) {
+      const listEl = document.getElementById('mention-popup-list');
+      const filtered = allAgents.filter(a => {
+        const name = (a.name || a.id).toLowerCase();
+        const div = (a.division || '').toLowerCase();
+        return !query || name.includes(query) || div.includes(query);
+      }).slice(0, 15);
+
+      document.getElementById('mention-filter-count').textContent = `${filtered.length} ditemukan`;
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div style="padding:14px; text-align:center; font-size:12px; color:var(--text-dim);">Tidak ada spesialis yang cocok dengan "${query}"</div>`;
+        mentionPopup.classList.add('show');
+        return;
+      }
+
+      mentionFocusIndex = 0;
+      listEl.innerHTML = filtered.map((a, idx) => {
+        const div = a.division || 'general';
+        const name = a.name || a.id;
+        const color = DIV_COLORS[div] || '#e06847';
+        const initials = name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'AG';
+
+        return `
+          <div class="mention-item ${idx === 0 ? 'focused' : ''}" onclick="applyMentionAgent('${a.id}')">
+            <div class="mention-item-avatar" style="background:${color}">${initials}</div>
+            <div class="mention-item-details">
+              <div class="mention-item-name">${name}</div>
+              <div class="mention-item-desc">${a.description || div}</div>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim);">@${div}</div>
+          </div>
+        `;
+      }).join('');
+
+      mentionPopup.classList.add('show');
+    }
+
+    function updateMentionFocus() {
+      const items = document.querySelectorAll('.mention-item');
+      items.forEach((item, idx) => {
+        item.classList.toggle('focused', idx === mentionFocusIndex);
+        if (idx === mentionFocusIndex) item.scrollIntoView({ block: 'nearest' });
+      });
+    }
+
+    function hideMentionPopup() {
+      mentionPopup.classList.remove('show');
+    }
+
+    function applyMentionAgent(agentId) {
+      selectAgent(agentId);
+      const val = inputEl.value;
+      const cursorPos = inputEl.selectionStart;
+      const beforeCursor = val.slice(0, cursorPos);
+      const afterCursor = val.slice(cursorPos);
+      const cleanedBefore = beforeCursor.replace(/[@/][a-zA-Z0-9_\-\s]*$/, '');
+
+      inputEl.value = cleanedBefore + afterCursor;
+      hideMentionPopup();
+      inputEl.focus();
+    }
+
+    // =====================================================================
+    // AGENT DIRECTORY (ROSTER HUB)
+    // =====================================================================
+    function openDirectoryModal() {
+      document.getElementById('directory-modal').classList.add('show');
+      document.getElementById('directory-search-input').focus();
+    }
+
+    function closeDirectoryModal() {
+      document.getElementById('directory-modal').classList.remove('show');
+    }
+
+    function closeDirectoryOutside(e) {
+      if (e.target === document.getElementById('directory-modal')) closeDirectoryModal();
+    }
+
+    function renderDirectoryDivisionTabs() {
+      const container = document.getElementById('directory-division-tabs');
+      const divisions = ['all', ...new Set(allAgents.map(a => a.division || 'general').filter(Boolean))];
+
+      container.innerHTML = divisions.map(div => {
+        const label = div === 'all' ? '🏢 Semua Divisi' : div.replace(/-/g, ' ');
+        return `
+          <button class="div-tab ${div === activeDirectoryDivision ? 'active' : ''}" onclick="filterDirectoryDivision('${div}', this)">
+            ${label}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function filterDirectoryDivision(div, btn) {
+      activeDirectoryDivision = div;
+      document.querySelectorAll('.div-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderDirectoryGrid();
+    }
+
+    function renderDirectoryGrid() {
+      const grid = document.getElementById('directory-grid');
+      const search = (document.getElementById('directory-search-input').value || '').toLowerCase();
+
+      const filtered = allAgents.filter(a => {
+        const div = (a.division || 'general').toLowerCase();
+        const name = (a.name || a.id).toLowerCase();
+        const desc = (a.description || '').toLowerCase();
+        const matchDiv = activeDirectoryDivision === 'all' || (a.division || 'general') === activeDirectoryDivision;
+        const matchSearch = !search || name.includes(search) || div.includes(search) || desc.includes(search);
+        return matchDiv && matchSearch;
+      });
+
+      if (!filtered.length) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; padding: 40px; text-align: center; color: var(--text-dim);">Tidak ada spesialis yang ditemukan.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(a => {
+        const div = a.division || 'general';
+        const name = a.name || a.id;
+        const color = DIV_COLORS[div] || '#e06847';
+        const initials = name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'AG';
+
+        return `
+          <div class="directory-agent-card" onclick="selectAgent('${a.id}')">
+            <div class="card-top-row">
+              <div class="dir-card-avatar" style="background:${color}">${initials}</div>
+              <div>
+                <div class="dir-card-name">${name}</div>
+                <div class="dir-card-division">${div}</div>
+              </div>
+            </div>
+            <div class="dir-card-desc">${a.description || 'Pakar profesional spesialis di bidang ' + div}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('directory-search-input').addEventListener('input', renderDirectoryGrid);
+
+    // =====================================================================
+    // LIVE ARTIFACTS DRAWER (PREVIEW)
+    // =====================================================================
+    let activeDrawerHtml = '';
+
+    function openArtifactDrawer(snippetIndex) {
+      let code = (windowCodeSnippets && windowCodeSnippets[snippetIndex]) || '';
+      const doc = new DOMParser().parseFromString(code, 'text/html');
+      code = doc.body.textContent || code;
+
+      if (!/<!DOCTYPE|<html/i.test(code)) {
+        code = `
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artifact Preview</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>body { font-family: system-ui, -apple-system, sans-serif; }</style>
+</head>
+<body class="bg-slate-50 text-slate-900 p-4 min-h-screen">
+  ${code}
+</body>
+</html>`;
+      } else if (!code.includes('tailwindcss.com')) {
+        code = code.replace(/<head>/i, '<head><script src="https://cdn.tailwindcss.com"><\/script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">');
+      }
+
+      activeDrawerHtml = code;
+      const iframe = document.getElementById('drawer-iframe');
+      iframe.srcdoc = code;
+
+      document.getElementById('drawer-app-title').textContent = `${currentAgent?.name || 'Live'} Application`;
+      document.getElementById('artifact-drawer').classList.add('open');
+    }
+
+    function closeArtifactDrawer() {
+      document.getElementById('artifact-drawer').classList.remove('open');
+      document.getElementById('drawer-iframe').srcdoc = '';
+    }
+
+    function reloadDrawerIframe() {
+      document.getElementById('drawer-iframe').srcdoc = activeDrawerHtml;
+    }
+
+    function openDrawerInNewTab() {
+      if (!activeDrawerHtml) return;
+      const blob = new Blob([activeDrawerHtml], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    }
+
+    function downloadDrawerHtml() {
+      if (!activeDrawerHtml) return;
+      const blob = new Blob([activeDrawerHtml], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${(currentAgent?.name || 'app').toLowerCase().replace(/\s+/g, '-')}.html`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function copySnippet(snippetIndex) {
+      let code = (windowCodeSnippets && windowCodeSnippets[snippetIndex]) || '';
+      const doc = new DOMParser().parseFromString(code, 'text/html');
+      code = doc.body.textContent || code;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('Kode berhasil disalin ke clipboard!');
+      });
+    }
+
+    // =====================================================================
+    // SETTINGS MODAL
+    // =====================================================================
+    function openSettingsModal() {
+      document.getElementById('gemini-key-input').value = localStorage.getItem('agency_gemini_api_key') || '';
+      document.getElementById('settings-modal').classList.add('show');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').classList.remove('show');
+    }
+
+    function closeSettingsOutside(e) {
+      if (e.target === document.getElementById('settings-modal')) closeSettingsModal();
+    }
+
+    function saveSettings() {
+      const key = document.getElementById('gemini-key-input').value.trim();
+      localStorage.setItem('agency_gemini_api_key', key);
+      closeSettingsModal();
+      alert('Pengaturan berhasil disimpan!');
+    }
+
+    // Run on startup
+    initApp();
+  </script>
 </body>
 </html>
