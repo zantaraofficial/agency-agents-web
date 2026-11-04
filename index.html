@@ -6,292 +6,134 @@
   <title>🏢 The Agency — AI Specialist Browser</title>
   <style>
     :root[data-theme="dark"] {
-      --bg: #0f1117;
-      --bg2: #161b27;
-      --card: #1c2333;
-      --card-hover: #232e45;
-      --border: #2a3650;
-      --text: #e2e8f0;
-      --muted: #8892a4;
-      --accent: #5b8dee;
-      --accent2: #7c3aed;
-      --green: #22c55e;
-      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --bg: #0f1117; --bg2: #161b27; --card: #1c2333; --card-hover: #232e45;
+      --border: #2a3650; --text: #e2e8f0; --muted: #8892a4;
+      --accent: #5b8dee; --accent2: #7c3aed; --green: #22c55e;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4); --overlay: rgba(0,0,0,0.7);
     }
     :root[data-theme="light"] {
-      --bg: #f1f5f9;
-      --bg2: #e2e8f0;
-      --card: #ffffff;
-      --card-hover: #f8faff;
-      --border: #cbd5e1;
-      --text: #1e293b;
-      --muted: #64748b;
-      --accent: #2563eb;
-      --accent2: #7c3aed;
-      --green: #16a34a;
-      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --bg: #f1f5f9; --bg2: #e2e8f0; --card: #ffffff; --card-hover: #f8faff;
+      --border: #cbd5e1; --text: #1e293b; --muted: #64748b;
+      --accent: #2563eb; --accent2: #7c3aed; --green: #16a34a;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08); --overlay: rgba(0,0,0,0.4);
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    /* ---- NAVBAR ---- */
-    .navbar {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
-      display: flex; align-items: center; gap: 16px;
-      backdrop-filter: blur(12px);
-    }
-    .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-    .logo span { color: var(--accent); }
-    .badge-total {
-      background: var(--accent);
-      color: white;
-      padding: 2px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-    }
+    /* NAVBAR */
+    .navbar { position: sticky; top: 0; z-index: 100; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 16px; backdrop-filter: blur(12px); }
+    .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .logo span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .badge-total { background: var(--accent); color: white; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
     .nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-    .theme-btn {
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.2s;
-    }
-    .theme-btn:hover { background: var(--card-hover); }
+    .btn-sm { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+    .btn-sm:hover { background: var(--card-hover); }
 
-    /* ---- HERO ---- */
-    .hero {
-      padding: 32px 24px 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .hero h1 {
-      font-size: clamp(24px, 4vw, 36px);
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 8px;
-    }
-    .hero p { color: var(--muted); font-size: 15px; margin-bottom: 24px; }
-    .hero-gradient {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    /* HERO */
+    .hero { padding: 28px 24px 20px; max-width: 1400px; margin: 0 auto; }
+    .hero h1 { font-size: clamp(22px, 4vw, 34px); font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
+    .hero p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+    .hero-gradient { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-    /* ---- STATS ---- */
-    .stats-row {
-      display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;
-    }
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 20px;
-      display: flex; align-items: center; gap: 12px;
-      flex: 1; min-width: 150px;
-    }
-    .stat-icon { font-size: 24px; }
-    .stat-num { font-size: 22px; font-weight: 800; }
-    .stat-label { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    /* STATS */
+    .stats-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; flex: 1; min-width: 140px; }
+    .stat-num { font-size: 20px; font-weight: 800; }
+    .stat-label { font-size: 11px; color: var(--muted); margin-top: 1px; }
 
-    /* ---- SEARCH & FILTERS ---- */
-    .controls {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 24px 20px;
-    }
-    .search-wrap {
-      position: relative; margin-bottom: 16px;
-    }
-    .search-icon {
-      position: absolute; left: 14px; top: 50%;
-      transform: translateY(-50%);
-      font-size: 16px; opacity: 0.5;
-    }
-    .search-input {
-      width: 100%;
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-size: 15px;
-      padding: 12px 16px 12px 42px;
-      border-radius: 12px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
+    /* COMMAND BUILDER */
+    .cmd-builder { background: linear-gradient(135deg, #1a2540, #1e1a40); border: 1px solid var(--accent); border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; }
+    .cmd-builder h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--accent); }
+    .cmd-builder p { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+    .cmd-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+    .cmd-select { background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 10px; font-size: 13px; flex: 1; min-width: 200px; outline: none; cursor: pointer; }
+    .cmd-input { background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 10px; font-size: 13px; flex: 2; min-width: 240px; outline: none; }
+    .cmd-input::placeholder { color: var(--muted); }
+    .cmd-input:focus, .cmd-select:focus { border-color: var(--accent); }
+    .cmd-generate { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .cmd-generate:hover { opacity: 0.85; transform: translateY(-1px); }
+    .cmd-output-wrap { margin-top: 14px; display: none; }
+    .cmd-output-wrap.show { display: block; }
+    .cmd-output { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; color: var(--green); line-height: 1.6; word-break: break-all; }
+    .cmd-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .cmd-copy-btn { background: var(--green); color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .cmd-copy-btn:hover { opacity: 0.85; }
+    .cmd-hint { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+    .cmd-hint strong { color: var(--accent); }
+
+    /* CONTROLS */
+    .controls { max-width: 1400px; margin: 0 auto; padding: 0 24px 16px; }
+    .search-wrap { position: relative; margin-bottom: 14px; }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px; opacity: 0.5; }
+    .search-input { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); font-size: 15px; padding: 11px 16px 11px 42px; border-radius: 12px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
     .search-input::placeholder { color: var(--muted); }
-    .search-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(91,141,238,0.15);
-    }
-    .clear-btn {
-      position: absolute; right: 12px; top: 50%;
-      transform: translateY(-50%);
-      background: var(--border); border: none; color: var(--muted);
-      border-radius: 50%; width: 22px; height: 22px;
-      cursor: pointer; font-size: 12px; display: none;
-      align-items: center; justify-content: center;
-    }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,141,238,0.15); }
+    .clear-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: var(--border); border: none; color: var(--muted); border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; display: none; align-items: center; justify-content: center; }
     .clear-btn.show { display: flex; }
-
-    .filter-scroll {
-      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-    }
-    .filter-label { font-size: 12px; color: var(--muted); font-weight: 600; margin-right: 4px; }
-    .div-btn {
-      padding: 6px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--muted);
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
-    }
+    .filter-scroll { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+    .filter-label { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 0.5px; margin-right: 2px; }
+    .div-btn { padding: 5px 13px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 12px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
     .div-btn:hover { border-color: var(--accent); color: var(--text); }
-    .div-btn.active {
-      color: white;
-      border-color: transparent;
-    }
-    .result-info {
-      margin-top: 12px;
-      font-size: 13px;
-      color: var(--muted);
-    }
+    .result-info { margin-top: 10px; font-size: 12px; color: var(--muted); }
 
-    /* ---- GRID ---- */
-    .grid-wrap {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 24px 60px;
-    }
-    #grid {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    }
+    /* GRID */
+    .grid-wrap { max-width: 1400px; margin: 0 auto; padding: 0 24px 60px; }
+    #grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
 
-    /* ---- AGENT CARD ---- */
-    .agent-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      display: flex; flex-direction: column; gap: 12px;
-      transition: all 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-    .agent-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      border-radius: 14px 14px 0 0;
-    }
-    .agent-card:hover {
-      background: var(--card-hover);
-      border-color: var(--accent);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow);
-    }
-    .card-top { display: flex; align-items: center; gap: 12px; }
-    .avatar {
-      width: 42px; height: 42px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 800; color: white;
-      flex-shrink: 0;
-    }
-    .card-meta { flex: 1; min-width: 0; }
-    .card-name {
-      font-size: 14px; font-weight: 700;
-      color: var(--text);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .card-div {
-      font-size: 12px; color: var(--muted); margin-top: 2px;
-    }
-    .slug-row {
-      display: flex; align-items: center; gap: 6px;
-    }
-    .slug {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 4px 8px;
-      flex: 1; min-width: 0;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .copy-btn {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 11px;
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
+    /* AGENT CARD */
+    .agent-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s; position: relative; overflow: hidden; }
+    .agent-card:hover { background: var(--card-hover); border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+    .card-stripe { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0; }
+    .card-top { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: white; flex-shrink: 0; }
+    .card-name { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-div { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .slug-row { display: flex; align-items: center; gap: 5px; }
+    .slug { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 10px; color: var(--muted); background: var(--bg2); border: 1px solid var(--border); border-radius: 5px; padding: 3px 7px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .copy-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); border-radius: 5px; padding: 3px 7px; font-size: 10px; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
     .copy-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
     .copy-btn.copied { background: var(--green); color: white; border-color: var(--green); }
 
-    /* ---- EMPTY ---- */
-    #empty {
-      display: none;
-      text-align: center;
-      padding: 80px 20px;
-      color: var(--muted);
-    }
-    #empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
-    #empty p { font-size: 16px; }
+    /* USE BUTTON */
+    .use-btn { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; border: none; border-radius: 8px; padding: 7px 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%; text-align: center; }
+    .use-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 
-    /* ---- FOOTER ---- */
-    footer {
-      text-align: center;
-      padding: 20px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 13px;
-    }
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: var(--overlay); z-index: 999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-overlay.show { display: flex; }
+    .modal { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; width: 100%; max-width: 540px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .modal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .modal-avatar { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: white; }
+    .modal-title { font-size: 17px; font-weight: 800; }
+    .modal-div { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .modal-close { margin-left: auto; background: var(--bg2); border: 1px solid var(--border); color: var(--muted); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+    .modal-close:hover { background: var(--border); }
+    .modal-label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 6px; margin-top: 16px; }
+    .modal-task { width: 100%; background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 12px 14px; border-radius: 10px; font-size: 14px; outline: none; resize: vertical; min-height: 90px; font-family: inherit; }
+    .modal-task::placeholder { color: var(--muted); }
+    .modal-task:focus { border-color: var(--accent); }
+    .modal-command { background: var(--bg); border: 1px dashed var(--border); border-radius: 10px; padding: 12px 14px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: var(--green); line-height: 1.6; word-break: break-all; min-height: 60px; margin-top: 6px; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
+    .modal-copy { flex: 1; background: var(--green); color: white; border: none; padding: 11px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .modal-copy:hover { opacity: 0.85; }
+    .modal-copy.copied { background: #15803d; }
+    .modal-cancel { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); padding: 11px 18px; border-radius: 10px; font-size: 14px; cursor: pointer; }
+    .modal-hint { margin-top: 12px; padding: 10px 14px; background: rgba(91,141,238,0.1); border: 1px solid rgba(91,141,238,0.2); border-radius: 8px; font-size: 12px; color: var(--accent); line-height: 1.5; }
+
+    /* EMPTY / FOOTER / TOAST */
+    #empty { display: none; text-align: center; padding: 80px 20px; color: var(--muted); }
+    #empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    footer { text-align: center; padding: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
     footer a { color: var(--accent); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
-
-    /* ---- TOAST ---- */
-    #toast {
-      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: var(--green); color: white;
-      padding: 10px 20px; border-radius: 999px;
-      font-size: 14px; font-weight: 600;
-      transition: transform 0.3s ease;
-      pointer-events: none; z-index: 9999;
-    }
+    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--green); color: white; padding: 10px 24px; border-radius: 999px; font-size: 14px; font-weight: 700; transition: transform 0.3s ease; pointer-events: none; z-index: 9999; }
     #toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* ---- RESPONSIVE ---- */
     @media (max-width: 600px) {
       .hero, .controls, .grid-wrap { padding-left: 16px; padding-right: 16px; }
       .navbar { padding: 10px 16px; }
-      .stats-row { flex-direction: column; }
+      .cmd-row { flex-direction: column; }
+      .modal { padding: 20px; }
     }
   </style>
 </head>
@@ -302,98 +144,139 @@
   <span class="logo">🏢 <span>The Agency</span></span>
   <span class="badge-total" id="nav-count">283 Agents</span>
   <div class="nav-right">
-    <button class="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
+    <button class="btn-sm" onclick="toggleTheme()">🌙 Dark</button>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <h1><span class="hero-gradient">283 AI Specialists</span><br/>Ready to Transform Your Workflow</h1>
-  <p>Koleksi lengkap AI agent yang terinstall sebagai Antigravity Skills. Gunakan slug di bawah untuk mengaktifkan agent di Antigravity.</p>
-
-  <!-- STATS -->
+  <h1><span class="hero-gradient">283 AI Specialists</span><br/>Siap Membantu Workflow Kamu</h1>
+  <p>Pilih agent → Ketik tugasmu → Copy command → Paste di Antigravity chat. Semudah itu! 🚀</p>
   <div class="stats-row" id="stats-row"></div>
+
+  <!-- COMMAND BUILDER -->
+  <div class="cmd-builder">
+    <h3>⚡ Command Builder</h3>
+    <p>Pilih agent dan tulis tugasmu — command siap di-copy ke Antigravity</p>
+    <div class="cmd-row">
+      <select class="cmd-select" id="cmd-agent-select">
+        <option value="">— Pilih Agent —</option>
+      </select>
+      <input type="text" class="cmd-input" id="cmd-task-input" placeholder="Contoh: review kode React saya, buat SEO untuk landing page..." />
+      <button class="cmd-generate" onclick="generateCommand()">⚡ Generate</button>
+    </div>
+    <div class="cmd-output-wrap" id="cmd-output-wrap">
+      <div class="cmd-output" id="cmd-output"></div>
+      <div class="cmd-actions">
+        <button class="cmd-copy-btn" id="cmd-copy-btn" onclick="copyCommand()">📋 Copy Command</button>
+      </div>
+      <div class="cmd-hint">💡 Paste command ini langsung ke chat <strong>Antigravity</strong> dan tekan Enter</div>
+    </div>
+  </div>
 </section>
 
 <!-- CONTROLS -->
 <section class="controls">
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input type="text" id="search" class="search-input" placeholder="Cari agent, divisi, atau skill..." />
+    <input type="text" id="search" class="search-input" placeholder="Cari agent, divisi, atau keahlian..." />
     <button class="clear-btn" id="clear-btn" onclick="clearSearch()">✕</button>
   </div>
-
   <div class="filter-scroll">
     <span class="filter-label">DIVISI:</span>
     <div id="filters"></div>
   </div>
-
   <div class="result-info" id="result-info">Menampilkan 283 / 283 agents</div>
 </section>
 
 <!-- GRID -->
 <section class="grid-wrap">
   <div id="grid"></div>
-  <div id="empty">
-    <div class="empty-icon">🔎</div>
-    <p>Tidak ada agent yang ditemukan</p>
-  </div>
+  <div id="empty"><div class="empty-icon">🔎</div><p>Tidak ada agent ditemukan</p></div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <p>Built from <a href="https://github.com/msitarzewski/agency-agents" target="_blank">agency-agents</a> · Installed as Antigravity Skills</p>
+  <p>Built from <a href="https://github.com/msitarzewski/agency-agents" target="_blank">agency-agents</a> · Installed as Antigravity Skills · <a href="https://github.com/zantaraofficial/agency-agents-web" target="_blank">Source</a></p>
 </footer>
 
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-avatar" id="modal-avatar"></div>
+      <div>
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-div" id="modal-div"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-label">TUGASMU UNTUK AGENT INI:</div>
+    <textarea class="modal-task" id="modal-task" placeholder="Contoh: Review kode login saya dan cari bug keamanan..." oninput="updateModalCommand()"></textarea>
+
+    <div class="modal-label">COMMAND YANG DIHASILKAN:</div>
+    <div class="modal-command" id="modal-command">Use the <span style="color:var(--accent)">agency-...</span> skill to <em style="color:var(--muted)">ketik tugasmu di atas...</em></div>
+
+    <div class="modal-actions">
+      <button class="modal-copy" id="modal-copy-btn" onclick="copyModalCommand()">📋 Copy & Siap Paste ke Antigravity</button>
+      <button class="modal-cancel" onclick="closeModal()">Tutup</button>
+    </div>
+    <div class="modal-hint">
+      💬 Setelah copy, buka Antigravity → paste di chat → tekan <strong>Enter</strong>. Agent langsung aktif!
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
-<div id="toast">✅ Slug disalin!</div>
+<div id="toast">✅ Command disalin! Paste di Antigravity sekarang</div>
 
 <script>
 // =====================================================================
 // DATA
 // =====================================================================
 const DIVISIONS = {
-  engineering:         { label: "⚙️ Engineering",       color: "#3b82f6", bg: "#1e3a5f" },
-  design:              { label: "🎨 Design",             color: "#a855f7", bg: "#3b1f5e" },
-  marketing:           { label: "📢 Marketing",          color: "#f59e0b", bg: "#5c3d00" },
-  sales:               { label: "💼 Sales",              color: "#10b981", bg: "#0a3d2e" },
-  finance:             { label: "💰 Finance",            color: "#06b6d4", bg: "#0a3444" },
-  security:            { label: "🛡️ Security",           color: "#ef4444", bg: "#4a1515" },
-  product:             { label: "📦 Product",            color: "#f97316", bg: "#4a2200" },
-  research:            { label: "🔬 Research",           color: "#ec4899", bg: "#4a1030" },
-  "game-development":  { label: "🎮 Game Dev",           color: "#7c3aed", bg: "#2e1657" },
-  gis:                 { label: "🗺️ GIS",                color: "#059669", bg: "#0a3028" },
-  healthcare:          { label: "🏥 Healthcare",         color: "#0ea5e9", bg: "#0a2a40" },
-  testing:             { label: "🧪 Testing",            color: "#84cc16", bg: "#283010" },
-  support:             { label: "🎧 Support",            color: "#64748b", bg: "#1e2a38" },
-  "project-management":{ label: "📋 Project Mgmt",       color: "#b45309", bg: "#3d2000" },
-  "paid-media":        { label: "📣 Paid Media",         color: "#db2777", bg: "#450a28" },
-  "spatial-computing": { label: "🥽 XR / Spatial",       color: "#6366f1", bg: "#1e1f5e" },
-  academic:            { label: "🎓 Academic",           color: "#0369a1", bg: "#0a2238" },
-  strategy:            { label: "♟️ Strategy",           color: "#b91c1c", bg: "#3d0a0a" },
-  specialized:         { label: "⭐ Specialized",        color: "#d97706", bg: "#3d2000" },
+  engineering:          { label: "⚙️ Engineering",    color: "#3b82f6" },
+  design:               { label: "🎨 Design",          color: "#a855f7" },
+  marketing:            { label: "📢 Marketing",        color: "#f59e0b" },
+  sales:                { label: "💼 Sales",            color: "#10b981" },
+  finance:              { label: "💰 Finance",          color: "#06b6d4" },
+  security:             { label: "🛡️ Security",         color: "#ef4444" },
+  product:              { label: "📦 Product",          color: "#f97316" },
+  research:             { label: "🔬 Research",         color: "#ec4899" },
+  "game-development":   { label: "🎮 Game Dev",         color: "#7c3aed" },
+  gis:                  { label: "🗺️ GIS",              color: "#059669" },
+  healthcare:           { label: "🏥 Healthcare",       color: "#0ea5e9" },
+  testing:              { label: "🧪 Testing",          color: "#84cc16" },
+  support:              { label: "🎧 Support",          color: "#64748b" },
+  "project-management": { label: "📋 Project Mgmt",     color: "#b45309" },
+  "paid-media":         { label: "📣 Paid Media",       color: "#db2777" },
+  "spatial-computing":  { label: "🥽 XR / Spatial",     color: "#6366f1" },
+  academic:             { label: "🎓 Academic",         color: "#0369a1" },
+  strategy:             { label: "♟️ Strategy",          color: "#b91c1c" },
+  specialized:          { label: "⭐ Specialized",      color: "#d97706" },
 };
 
 const DIV_KEYWORDS = {
-  engineering: ['frontend','backend','software','architect','developer','engineer','devops','platform','database','cms','webassembly','embedded','firmware','realtime','payments','pdf','lsp','rust','terminal','dx','codebase','git','code-reviewer','minimal-change','rapid-prototyper','mobile-app','mobile-release','iot','wordpress','drupal','uswds','fedramp','orgscript','autonomous','voice-ai','llm','rag','ai-engineer','mcp','multi-agent','agents-orchestrator','agentic-identity','automation-governance','workflow-architect','knowledge-graph','identity-access','secrets','privacy-engineer','data-engineer','data-visualization','finops','feishu','wechat-mini','gaussdb','china-network','blender'],
-  design: ['ui-designer','ux','visual-storyteller','image-prompt','technical-artist','inclusive-visuals','ui-finish','persona-walkthrough','accessibility-auditor','section-508'],
-  marketing: ['seo','baidu','growth-hacker','social-media','content-creator','email-marketing','brand','pr-communications','instagram','linkedin','twitter-engager','tiktok','douyin','kuaishou','xiaohongshu','weibo','bilibili','wechat-official','app-store','podcast','video-optimization','multi-platform','carousel','short-video','livestream','agentic-search','ai-citation','trend-researcher','search-query','behavioral','whimsy'],
-  sales: ['sales-coach','sales-engineer','sales-outreach','outbound','deal-strategist','account-strategist','pipeline','proposal','solution-engineer','offer-lead','customer-success','discovery-coach','sales-data','identity-graph','private-domain'],
-  finance: ['financial','chief-financial','fp-a','bookkeeper','accounts-payable','finance-tracker','investment','pricing','tax','loan','finops'],
-  security: ['security-architect','penetration','application-security','cloud-security','incident','threat','secops','blockchain-security','ai-generated-code-security','data-privacy','compliance','fedramp','zk-steward'],
-  product: ['product-manager','sprint','experiment-tracker','tool-evaluator','reality-checker','feedback-synthesizer','strategy-duel','business-strategist','analytics-reporter'],
-  research: ['research-synthesist','statistician','historian','anthropologist','narratologist','cultural-intelligence','geographer','grant-writer','book-co-author','study-abroad','psychologist','personal-growth','organizational-psychologist','evidence-collector','language-translator','search-relevance','ai-data-remediation','data-consolidation','model-qa','x-twitter-intelligence','focus-music'],
-  "game-development": ['game','unity','unreal','godot','roblox','level-designer','narrative-designer','economy-designer','game-audio'],
-  gis: ['gis','geo','spatial-data','web-gis','drone','bim','cartography','civil-engineer'],
-  healthcare: ['healthcare','medical','clinical','sovereign-health','aging-parent'],
-  testing: ['test-automation','test-results','api-tester','performance-benchmark','model-qa','ai-generated-code-security','gis-qa','ui-finish'],
-  support: ['customer-service','support-responder','hospitality','retail-customer','it-service','meeting-notes','document-generator','executive-summary','report-distribution','universal-document','technical-writer'],
+  engineering:          ['frontend','backend','software','architect','developer','engineer','devops','platform','database','cms','webassembly','embedded','firmware','realtime','payments','pdf','lsp','rust','terminal','dx','codebase','git','code-reviewer','minimal-change','rapid-prototyper','mobile-app','mobile-release','iot','wordpress','drupal','uswds','fedramp','orgscript','autonomous','voice-ai','llm','rag','ai-engineer','mcp','multi-agent','agents-orchestrator','agentic-identity','automation-governance','workflow-architect','knowledge-graph','identity-access','secrets','privacy-engineer','data-engineer','data-visualization','finops','feishu','wechat-mini','gaussdb','china-network','blender','analytics'],
+  design:               ['ui-designer','ux','visual-storyteller','image-prompt','technical-artist','inclusive-visuals','ui-finish','persona-walkthrough','accessibility-auditor','section-508'],
+  marketing:            ['seo','baidu','growth-hacker','social-media','content-creator','email-marketing','brand','pr-communications','instagram','linkedin','twitter-engager','tiktok','douyin','kuaishou','xiaohongshu','weibo','bilibili','wechat-official','app-store','podcast','video-optimization','multi-platform','carousel','short-video','livestream','agentic-search','ai-citation','trend-researcher','search-query','behavioral','whimsy'],
+  sales:                ['sales-coach','sales-engineer','sales-outreach','outbound','deal-strategist','account-strategist','pipeline','proposal','solution-engineer','offer-lead','customer-success','discovery-coach','sales-data','identity-graph','private-domain'],
+  finance:              ['financial','chief-financial','fp-a','bookkeeper','accounts-payable','finance-tracker','investment','pricing','tax','loan','finops'],
+  security:             ['security-architect','penetration','application-security','cloud-security','incident','threat','secops','blockchain-security','ai-generated-code-security','data-privacy','compliance','fedramp','zk-steward'],
+  product:              ['product-manager','sprint','experiment-tracker','tool-evaluator','reality-checker','feedback-synthesizer','strategy-duel','business-strategist'],
+  research:             ['research-synthesist','statistician','historian','anthropologist','narratologist','cultural-intelligence','geographer','grant-writer','book-co-author','study-abroad','psychologist','personal-growth','organizational-psychologist','evidence-collector','language-translator','search-relevance','ai-data-remediation','data-consolidation','model-qa','x-twitter-intelligence','focus-music'],
+  "game-development":   ['game','unity','unreal','godot','roblox','level-designer','narrative-designer','economy-designer'],
+  gis:                  ['gis','geo','spatial-data','web-gis','drone','bim','cartography','civil-engineer'],
+  healthcare:           ['healthcare','medical','clinical','sovereign-health','aging-parent'],
+  testing:              ['test-automation','test-results','api-tester','performance-benchmark'],
+  support:              ['customer-service','support-responder','hospitality','retail-customer','it-service','meeting-notes','document-generator','executive-summary','report-distribution','universal-document','technical-writer'],
   "project-management": ['senior-project','project-shepherd','chief-of-staff','operations-manager','jira','workflow-optimizer','change-management','master-plan','studio-operations','studio-producer','m-a-integration','supply-chain','esg'],
-  "paid-media": ['paid-media','paid-social','ppc','programmatic','ad-creative','tracking-measurement'],
-  "spatial-computing": ['xr','visionos','macos-spatial','3d-scene'],
-  academic: ['grant-writer','historian','anthropologist','narratologist','statistician','book-co-author','study-abroad'],
-  strategy: ['business-strategist','strategy-duel','chief-of-staff','french-consulting','korean-business','china-market','cross-border','china-e-commerce','government-digital','real-estate','supply-chain'],
-  specialized: ['prompt-engineer','developer-advocate','developer-community','reddit-community','legal','hr-onboarding','recruitment','corporate-training','electrical-engineer','network-engineer','filament','solidity','salesforce','servicenow','ats-validator','resume-tailor','zhihu','aeo-foundations'],
+  "paid-media":         ['paid-media','paid-social','ppc','programmatic','ad-creative','tracking-measurement'],
+  "spatial-computing":  ['xr','visionos','macos-spatial','3d-scene'],
+  academic:             ['grant-writer','historian','anthropologist','narratologist','statistician','book-co-author','study-abroad'],
+  strategy:             ['business-strategist','strategy-duel','french-consulting','korean-business','china-market','cross-border','china-e-commerce','government-digital','real-estate'],
+  specialized:          ['prompt-engineer','developer-advocate','developer-community','reddit-community','legal','hr-onboarding','recruitment','corporate-training','electrical-engineer','network-engineer','filament','solidity','salesforce','servicenow','ats-validator','resume-tailor','zhihu','aeo-foundations'],
 };
 
 function detectDivision(slug) {
@@ -407,13 +290,13 @@ function detectDivision(slug) {
 const RAW_SLUGS = ["agency-3d-scene-developer","agency-accessibility-auditor","agency-account-strategist","agency-accounts-payable-agent","agency-ad-creative-strategist","agency-aeo-foundations-architect","agency-agentic-identity-trust-architect","agency-agentic-search-optimizer","agency-agents-orchestrator","agency-aging-parent-care-companion","agency-ai-citation-strategist","agency-ai-data-remediation-engineer","agency-ai-engineer","agency-ai-generated-code-security-auditor","agency-analytics-reporter","agency-anthropologist","agency-api-platform-engineer","agency-api-tester","agency-app-store-optimizer","agency-application-security-engineer","agency-ats-validator-architect","agency-automation-governance-architect","agency-autonomous-optimization-architect","agency-backend-architect","agency-baidu-seo-specialist","agency-behavioral-nudge-engine","agency-bilibili-content-strategist","agency-bim-gis-specialist","agency-blender-add-on-engineer","agency-blockchain-security-auditor","agency-book-co-author","agency-bookkeeper-controller","agency-brand-guardian","agency-business-strategist","agency-carousel-growth-engine","agency-cartography-designer","agency-change-management-consultant","agency-chief-financial-officer","agency-chief-of-staff","agency-china-e-commerce-operator","agency-china-market-localization-strategist","agency-china-network-engineer","agency-civil-engineer","agency-clinical-evidence-agent","agency-cloud-security-architect","agency-cms-developer","agency-code-reviewer","agency-codebase-archaeologist","agency-codebase-onboarding-engineer","agency-compliance-auditor","agency-content-creator","agency-corporate-training-designer","agency-cross-border-e-commerce-specialist","agency-cultural-intelligence-strategist","agency-customer-service","agency-customer-success-manager","agency-data-consolidation-agent","agency-data-engineer","agency-data-privacy-officer","agency-data-visualization-engineer","agency-database-optimizer","agency-database-reliability-engineer","agency-deal-strategist","agency-desktop-app-engineer","agency-developer-advocate","agency-developer-community-builder","agency-developer-tooling-engineer","agency-devops-automator","agency-discovery-coach","agency-document-generator","agency-douyin-strategist","agency-drone-reality-mapping-specialist","agency-drupal-performance-engineer","agency-drupal-shopping-cart-engineer","agency-dx-engineer","agency-economy-designer","agency-electrical-engineer","agency-email-intelligence-engineer","agency-email-marketing-strategist","agency-embedded-firmware-engineer","agency-esg-sustainability-officer","agency-evidence-collector","agency-executive-summary-generator","agency-experiment-tracker","agency-fedramp-rmf-compliance-engineer","agency-feedback-synthesizer","agency-feishu-integration-developer","agency-filament-optimization-specialist","agency-finance-tracker","agency-financial-analyst","agency-finops-engineer","agency-focus-music-architect","agency-fp-a-analyst","agency-french-consulting-market-navigator","agency-frontend-developer","agency-game-audio-engineer","agency-game-designer","agency-gaussdb-expert-engineer","agency-geoai-ml-engineer","agency-geographer","agency-geoprocessing-specialist","agency-gis-analyst","agency-gis-qa-engineer","agency-git-workflow-master","agency-global-podcast-strategist","agency-godot-gameplay-scripter","agency-godot-multiplayer-engineer","agency-godot-shader-developer","agency-government-digital-presales-consultant","agency-grant-writer","agency-growth-hacker","agency-healthcare-customer-service","agency-healthcare-innovation-strategist","agency-healthcare-marketing-compliance-specialist","agency-historian","agency-hospitality-guest-services","agency-hr-onboarding","agency-identity-access-engineer","agency-identity-graph-operator","agency-image-prompt-engineer","agency-incident-responder","agency-incident-response-commander","agency-inclusive-visuals-specialist","agency-infrastructure-maintainer","agency-instagram-curator","agency-internationalization-engineer","agency-investment-researcher","agency-iot-fleet-engineer","agency-it-service-manager","agency-jira-workflow-steward","agency-knowledge-graph-engineer","agency-korean-business-navigator","agency-kuaishou-strategist","agency-language-translator","agency-legal-billing-time-tracking","agency-legal-client-intake","agency-legal-compliance-checker","agency-legal-document-review","agency-level-designer","agency-linkedin-content-creator","agency-livestream-commerce-coach","agency-llm-post-training-engineer","agency-loan-officer-assistant","agency-lsp-index-engineer","agency-m-a-integration-manager","agency-macos-spatial-metal-engineer","agency-master-plan-architect","agency-mcp-builder","agency-medical-billing-coding-specialist","agency-meeting-notes-specialist","agency-minimal-change-engineer","agency-mobile-app-builder","agency-mobile-release-engineer","agency-model-qa-specialist","agency-multi-agent-systems-architect","agency-multi-platform-publisher","agency-narrative-designer","agency-narratologist","agency-network-engineer","agency-offer-lead-gen-strategist","agency-operations-manager","agency-organizational-psychologist","agency-orgscript-engineer","agency-outbound-strategist","agency-paid-media-auditor","agency-paid-social-strategist","agency-payments-billing-engineer","agency-pdf-engine-architect","agency-penetration-tester","agency-performance-benchmarker","agency-persona-walkthrough-specialist","agency-personal-growth-mentor","agency-pipeline-analyst","agency-platform-engineer","agency-podcast-strategist","agency-ppc-campaign-strategist","agency-pr-communications-manager","agency-pricing-analyst","agency-privacy-engineer","agency-private-domain-operator","agency-product-manager","agency-programmatic-display-buyer","agency-project-shepherd","agency-prompt-engineer","agency-proposal-strategist","agency-psychologist","agency-rag-pipeline-engineer","agency-rapid-prototyper","agency-real-estate-buyer-seller","agency-reality-checker","agency-realtime-collaboration-engineer","agency-recruitment-specialist","agency-reddit-community-builder","agency-report-distribution-agent","agency-research-synthesist","agency-resume-tailor","agency-retail-customer-returns","agency-roblox-avatar-creator","agency-roblox-experience-designer","agency-roblox-systems-scripter","agency-rust-refactoring-specialist","agency-sales-coach","agency-sales-data-extraction-agent","agency-sales-engineer","agency-sales-outreach","agency-salesforce-architect","agency-search-query-analyst","agency-search-relevance-engineer","agency-secrets-credential-hygiene-engineer","agency-section-508-accessibility-specialist","agency-security-architect","agency-senior-developer","agency-senior-project-manager","agency-senior-secops-engineer","agency-seo-specialist","agency-servicenow-developer-mentor","agency-short-video-editing-coach","agency-social-media-strategist","agency-software-architect","agency-solidity-smart-contract-engineer","agency-solution-engineer","agency-sovereign-health-systems-agent","agency-spatial-data-engineer","agency-spatial-data-scientist","agency-sprint-prioritizer","agency-sre-site-reliability-engineer","agency-statistician","agency-strategy-duel-agent","agency-studio-operations","agency-studio-producer","agency-study-abroad-advisor","agency-supply-chain-strategist","agency-support-responder","agency-tax-strategist","agency-technical-artist","agency-technical-consultant","agency-technical-writer","agency-terminal-integration-specialist","agency-test-automation-engineer","agency-test-results-analyzer","agency-threat-detection-engineer","agency-threat-intelligence-analyst","agency-tiktok-strategist","agency-tool-evaluator","agency-tracking-measurement-specialist","agency-trend-researcher","agency-twitter-engager","agency-ui-designer","agency-ui-finish-gate-reviewer","agency-unity-architect","agency-unity-editor-tool-developer","agency-unity-multiplayer-engineer","agency-unity-shader-graph-artist","agency-universal-document-compiler","agency-unreal-multiplayer-architect","agency-unreal-systems-engineer","agency-unreal-technical-artist","agency-unreal-world-builder","agency-uswds-developer","agency-ux-architect","agency-ux-researcher","agency-video-optimization-specialist","agency-video-streaming-engineer","agency-visionos-spatial-engineer","agency-visual-storyteller","agency-voice-ai-integration-engineer","agency-web-gis-developer","agency-webassembly-engineer","agency-wechat-mini-program-developer","agency-wechat-official-account-manager","agency-weibo-strategist","agency-whimsy-injector","agency-wordpress-performance-engineer","agency-wordpress-shopping-cart-engineer","agency-workflow-architect","agency-workflow-optimizer","agency-x-twitter-intelligence-analyst","agency-xiaohongshu-specialist","agency-xr-cockpit-interaction-specialist","agency-xr-immersive-developer","agency-xr-interface-architect","agency-zhihu-strategist","agency-zk-steward"];
 
 function toTitle(slug) {
-  return slug.replace('agency-', '').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  return slug.replace('agency-','').split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
 }
 
 const AGENTS = RAW_SLUGS.map(slug => {
   const divKey = detectDivision(slug);
   return { slug, name: toTitle(slug), divKey, div: DIVISIONS[divKey] };
-});
+}).sort((a,b) => a.name.localeCompare(b.name));
 
 // =====================================================================
 // STATE
@@ -421,6 +304,7 @@ const AGENTS = RAW_SLUGS.map(slug => {
 let activeDiv = 'all';
 let searchTerm = '';
 let isDark = true;
+let currentModalSlug = '';
 
 // =====================================================================
 // THEME
@@ -428,7 +312,7 @@ let isDark = true;
 function toggleTheme() {
   isDark = !isDark;
   document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  document.querySelector('.theme-btn').textContent = isDark ? '🌙 Dark' : '☀️ Light';
+  document.querySelector('.btn-sm').textContent = isDark ? '🌙 Dark' : '☀️ Light';
 }
 
 // =====================================================================
@@ -437,14 +321,47 @@ function toggleTheme() {
 function buildStats() {
   const counts = {};
   AGENTS.forEach(a => { counts[a.divKey] = (counts[a.divKey] || 0) + 1; });
-  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,4);
-
+  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,3);
   const html = [
-    `<div class="stat-card"><span class="stat-icon">🏢</span><div><div class="stat-num">${AGENTS.length}</div><div class="stat-label">Total Agents</div></div></div>`,
-    `<div class="stat-card"><span class="stat-icon">🗂️</span><div><div class="stat-num">${Object.keys(DIVISIONS).length}</div><div class="stat-label">Divisi</div></div></div>`,
-    ...top.map(([k,n]) => `<div class="stat-card"><span class="stat-icon">${DIVISIONS[k].label.split(' ')[0]}</span><div><div class="stat-num">${n}</div><div class="stat-label">${DIVISIONS[k].label.replace(/^.\s/,'')}</div></div></div>`)
+    `<div class="stat-card"><span style="font-size:22px">🏢</span><div><div class="stat-num">${AGENTS.length}</div><div class="stat-label">Total Agents</div></div></div>`,
+    `<div class="stat-card"><span style="font-size:22px">🗂️</span><div><div class="stat-num">${Object.keys(DIVISIONS).length}</div><div class="stat-label">Divisi</div></div></div>`,
+    ...top.map(([k,n]) => `<div class="stat-card"><span style="font-size:22px">${DIVISIONS[k].label.split(' ')[0]}</span><div><div class="stat-num">${n}</div><div class="stat-label">${DIVISIONS[k].label.replace(/^.\s/,'')}</div></div></div>`)
   ].join('');
   document.getElementById('stats-row').innerHTML = html;
+}
+
+// =====================================================================
+// COMMAND BUILDER (top)
+// =====================================================================
+function populateSelect() {
+  const sel = document.getElementById('cmd-agent-select');
+  AGENTS.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a.slug;
+    opt.textContent = `${a.div.label.split(' ')[0]} ${a.name}`;
+    sel.appendChild(opt);
+  });
+}
+
+function generateCommand() {
+  const slug = document.getElementById('cmd-agent-select').value;
+  const task = document.getElementById('cmd-task-input').value.trim();
+  const wrap = document.getElementById('cmd-output-wrap');
+  const out  = document.getElementById('cmd-output');
+  if (!slug) { alert('Pilih agent dulu!'); return; }
+  const cmd = task ? `Use the ${slug} skill to ${task}` : `Use the ${slug} skill`;
+  out.textContent = cmd;
+  wrap.classList.add('show');
+}
+
+function copyCommand() {
+  const text = document.getElementById('cmd-output').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('cmd-copy-btn');
+    btn.textContent = '✅ Tersalin!';
+    showToast();
+    setTimeout(() => btn.textContent = '📋 Copy Command', 2000);
+  });
 }
 
 // =====================================================================
@@ -453,13 +370,11 @@ function buildStats() {
 function buildFilters() {
   const counts = {};
   AGENTS.forEach(a => { counts[a.divKey] = (counts[a.divKey] || 0) + 1; });
-
-  const allBtn = `<button class="div-btn active" data-div="all" onclick="setFilter('all')" style="border-color:var(--accent);color:var(--text)">🏢 Semua (${AGENTS.length})</button>`;
-  const divBtns = Object.entries(DIVISIONS).map(([key, div]) => {
-    if (!counts[key]) return '';
-    return `<button class="div-btn" data-div="${key}" onclick="setFilter('${key}')" style="--div-color:${div.color}">${div.label} (${counts[key]})</button>`;
-  }).join('');
-
+  const allBtn = `<button class="div-btn active" data-div="all" onclick="setFilter('all')">🏢 Semua (${AGENTS.length})</button>`;
+  const divBtns = Object.entries(DIVISIONS).map(([key,div]) => counts[key]
+    ? `<button class="div-btn" data-div="${key}" onclick="setFilter('${key}')">${div.label} (${counts[key]})</button>`
+    : ''
+  ).join('');
   document.getElementById('filters').innerHTML = allBtn + divBtns;
 }
 
@@ -468,16 +383,10 @@ function setFilter(divKey) {
   document.querySelectorAll('.div-btn').forEach(btn => {
     const isActive = btn.dataset.div === divKey;
     btn.classList.toggle('active', isActive);
-    if (isActive) {
-      const d = DIVISIONS[divKey];
-      btn.style.background = d ? d.color : 'var(--accent)';
-      btn.style.borderColor = 'transparent';
-      btn.style.color = 'white';
-    } else {
-      btn.style.background = '';
-      btn.style.borderColor = '';
-      btn.style.color = '';
-    }
+    const d = DIVISIONS[divKey];
+    btn.style.background = isActive ? (d ? d.color : 'var(--accent)') : '';
+    btn.style.borderColor = isActive ? 'transparent' : '';
+    btn.style.color = isActive ? 'white' : '';
   });
   renderGrid();
 }
@@ -492,64 +401,101 @@ function renderGrid() {
     const matchSearch = !term || a.name.toLowerCase().includes(term) || a.slug.includes(term) || a.div.label.toLowerCase().includes(term) || a.divKey.includes(term);
     return matchDiv && matchSearch;
   });
-
   document.getElementById('result-info').textContent = `Menampilkan ${filtered.length} / ${AGENTS.length} agents`;
   document.getElementById('nav-count').textContent = `${filtered.length} Agents`;
-
   const empty = document.getElementById('empty');
-  const grid = document.getElementById('grid');
-
-  if (filtered.length === 0) {
-    grid.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
+  const grid  = document.getElementById('grid');
+  if (!filtered.length) { grid.innerHTML=''; empty.style.display='block'; return; }
   empty.style.display = 'none';
-
-  const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
-
   grid.innerHTML = filtered.map(a => {
     const initials = a.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
-    const avatarBg = isDarkMode ? (a.div.bg || a.div.color) : a.div.color;
     return `
-    <div class="agent-card" style="--card-accent:${a.div.color}">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${a.div.color};border-radius:14px 14px 0 0;"></div>
+    <div class="agent-card">
+      <div class="card-stripe" style="background:${a.div.color}"></div>
       <div class="card-top">
         <div class="avatar" style="background:${a.div.color}">${initials}</div>
-        <div class="card-meta">
+        <div>
           <div class="card-name" title="${a.name}">${a.name}</div>
           <div class="card-div">${a.div.label}</div>
         </div>
       </div>
       <div class="slug-row">
         <div class="slug" title="${a.slug}">${a.slug}</div>
-        <button class="copy-btn" onclick="copySlug(this,'${a.slug}')">📋 Copy</button>
+        <button class="copy-btn" onclick="copySlug(this,'${a.slug}')">Copy</button>
       </div>
+      <button class="use-btn" onclick="openModal('${a.slug}')">▶ Gunakan Agent Ini</button>
     </div>`;
   }).join('');
 }
 
 // =====================================================================
-// COPY
+// MODAL
 // =====================================================================
-function copySlug(btn, slug) {
-  navigator.clipboard.writeText(slug).then(() => {
+function openModal(slug) {
+  const a = AGENTS.find(x => x.slug === slug);
+  if (!a) return;
+  currentModalSlug = slug;
+  const initials = a.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  document.getElementById('modal-avatar').style.background = a.div.color;
+  document.getElementById('modal-avatar').textContent = initials;
+  document.getElementById('modal-title').textContent = a.name;
+  document.getElementById('modal-div').textContent = a.div.label;
+  document.getElementById('modal-task').value = '';
+  document.getElementById('modal-command').innerHTML = `Use the <span style="color:var(--accent)">${slug}</span> skill to <em style="color:var(--muted)">ketik tugasmu di atas...</em>`;
+  document.getElementById('modal-copy-btn').textContent = '📋 Copy & Siap Paste ke Antigravity';
+  document.getElementById('modal-copy-btn').classList.remove('copied');
+  document.getElementById('modal').classList.add('show');
+  setTimeout(() => document.getElementById('modal-task').focus(), 100);
+}
+
+function updateModalCommand() {
+  const task = document.getElementById('modal-task').value.trim();
+  const cmd  = document.getElementById('modal-command');
+  if (task) {
+    cmd.textContent = `Use the ${currentModalSlug} skill to ${task}`;
+  } else {
+    cmd.innerHTML = `Use the <span style="color:var(--accent)">${currentModalSlug}</span> skill to <em style="color:var(--muted)">ketik tugasmu di atas...</em>`;
+  }
+}
+
+function copyModalCommand() {
+  const task = document.getElementById('modal-task').value.trim();
+  const text = task ? `Use the ${currentModalSlug} skill to ${task}` : `Use the ${currentModalSlug} skill`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('modal-copy-btn');
+    btn.textContent = '✅ Tersalin! Buka Antigravity & Paste';
     btn.classList.add('copied');
-    btn.textContent = '✅ Copied';
     showToast();
     setTimeout(() => {
+      btn.textContent = '📋 Copy & Siap Paste ke Antigravity';
       btn.classList.remove('copied');
-      btn.textContent = '📋 Copy';
-    }, 1800);
+    }, 3000);
   });
 }
 
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+function closeModalOutside(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// =====================================================================
+// COPY SLUG
+// =====================================================================
+function copySlug(btn, slug) {
+  navigator.clipboard.writeText(slug).then(() => {
+    btn.classList.add('copied'); btn.textContent = '✅';
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 1800);
+  });
+}
+
+// =====================================================================
+// TOAST
+// =====================================================================
 let toastTimer;
 function showToast() {
   const t = document.getElementById('toast');
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 // =====================================================================
@@ -560,7 +506,6 @@ document.getElementById('search').addEventListener('input', e => {
   document.getElementById('clear-btn').classList.toggle('show', !!searchTerm);
   renderGrid();
 });
-
 function clearSearch() {
   document.getElementById('search').value = '';
   searchTerm = '';
@@ -572,6 +517,7 @@ function clearSearch() {
 // INIT
 // =====================================================================
 buildStats();
+populateSelect();
 buildFilters();
 renderGrid();
 </script>
